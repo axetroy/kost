@@ -1,5 +1,7 @@
 ## The web framework base on Koa and Typescript for NodeJS
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/axetroy/kost.svg)](https://greenkeeper.io/)
+
 In development...
 
 kost is a web framework write in Typescript.
