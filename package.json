@@ -1,0 +1,25 @@
+{
+  "name": "kost",
+  "version": "0.0.1",
+  "description": "The web framework base on Koa and Typescript for NodeJS",
+  "main": "index.ts",
+  "directories": {
+    "example": "example"
+  },
+  "devDependencies": {
+    "@types/node": "^9.4.5",
+    "ts-node": "^4.1.0",
+    "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "koa": "^2.5.0",
+    "koa-router": "^7.4.0",
+    "reflect-metadata": "^0.1.12",
+    "typedi": "^0.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Axetroy",
+  "license": "MIT"
+}
