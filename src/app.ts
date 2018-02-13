@@ -10,6 +10,19 @@ import Service, { Service$ } from "./service";
 
 interface Config$ {
   cluster: number;
+  enabled?: {
+    static?: boolean;
+    proxy?: {
+      from: {
+        path: string;
+      };
+      to: {
+        host: string;
+        port: number;
+        path: string;
+      };
+    };
+  };
 }
 
 interface AppService$ {
@@ -104,8 +117,13 @@ class App implements App$ {
 
     return this.app.listen(3000);
   }
-  use(middleware) {
-    this.app.use(middleware);
+  use(middlewareName: string, options = {}) {
+    // TODO: 查找对应的中间件(优先从本地查找，然后到node_modules)
+
+    // 加载对应的中间件
+    // this.app.use()
+
+    return this;
   }
 }
 

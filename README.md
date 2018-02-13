@@ -8,6 +8,11 @@ It base on Koa@2 and koa-router.
 
 **Feature**
 
-- [x] Dependency injection
-- [x] Write in Typescript
-- [x] Decorator for router
+* [x] Dependency injection
+* [x] Write in Typescript
+* [x] Decorator for router
+* [ ] Build in proxy in easy way.
+* [ ] Build in static file server
+* [ ] Middleware support
+* [ ] Support different config file
+* [ ] Build in support timing tasks

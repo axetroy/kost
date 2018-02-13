@@ -1,4 +1,4 @@
-import { Controller, Inject, GET } from "../../index";
+import { Controller, Inject, GET, POST } from "../../index";
 
 import UserService from "../services/user";
 
@@ -18,8 +18,8 @@ export default class TodoController extends Controller {
       }
     ];
   }
-  @GET("/whoami")
+  @POST("/todo/create")
   async name(ctx, next) {
-    ctx.body = await this.user.getUser();
+    ctx.body = "create a new todo task";
   }
 }
