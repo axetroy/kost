@@ -13,9 +13,14 @@ It base on Koa@2 and koa-router.
 * [x] Dependency injection
 * [x] Write in Typescript
 * [x] Decorator for router
-* [x] Build in proxy in easy way.
-* [x] Build in static file server
 * [x] Middleware support
+* [x] Service support
 * [ ] Support different config file
-* [ ] Build in support timing tasks
-* [ ] Build in support Body parser
+
+** Build in Support**
+
+* [x] Http/Websocket proxy
+* [x] Static file server
+* [x] Body parser
+* [ ] View engine
+* [ ] Cron task
