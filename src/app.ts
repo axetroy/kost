@@ -15,6 +15,16 @@ interface Config$ {
   enabled: {
     static?: {
       mount: string;
+      options?: {
+        maxage?: number;
+        hidden?: boolean;
+        index?: string;
+        defer?: boolean;
+        gzip?: boolean;
+        br?: boolean;
+        setHeaders(res: any, path: string, stats: any): any;
+        extensions?: boolean;
+      };
     };
     proxy?: {
       from: {
@@ -52,7 +62,12 @@ class App implements App$ {
 
     // enable the build in feature
     if (config.enabled.static) {
-      this.app.use(mount(config.enabled.static.mount, FileServer(staticDir)));
+      this.app.use(
+        mount(
+          config.enabled.static.mount,
+          FileServer(staticDir, config.enabled.static.options)
+        )
+      );
     }
 
     // 初始化service
