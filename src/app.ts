@@ -3,6 +3,8 @@ import * as fs from "fs";
 import * as path from "path";
 import * as Koa from "koa";
 import * as Router from "koa-router";
+import * as FileServer from "koa-static";
+import * as mount from "koa-mount";
 import { Container } from "typedi";
 
 import Controller, { Controller$ } from "./controller";
@@ -10,8 +12,10 @@ import Service, { Service$ } from "./service";
 
 interface Config$ {
   cluster: number;
-  enabled?: {
-    static?: boolean;
+  enabled: {
+    static?: {
+      mount: string;
+    };
     proxy?: {
       from: {
         path: string;
@@ -39,13 +43,19 @@ class App implements App$ {
   private controllers: Controller$[] = [];
   public service: AppService$ = {};
   async start(config: Config$) {
-    const controllerDir = path.join(process.cwd(), "controllers");
-    const serviceDir = path.join(process.cwd(), "services");
+    const cwd = process.cwd();
+    const controllerDir = path.join(cwd, "controllers");
+    const serviceDir = path.join(cwd, "services");
+    const staticDir = path.join(cwd, "static");
     const controllerFiles = fs.readdirSync(controllerDir);
     const serviceFiles = fs.readdirSync(serviceDir);
 
-    // 初始化service
+    // enable the build in feature
+    if (config.enabled.static) {
+      this.app.use(mount(config.enabled.static.mount, FileServer(staticDir)));
+    }
 
+    // 初始化service
     const services: Service$[] = serviceFiles
       .filter(
         serviceFile => [".js", ".ts"].indexOf(path.extname(serviceFile)) >= 0
