@@ -169,12 +169,11 @@ class App implements App$ {
       for (let i = 0; i < controller.router.length; i++) {
         const route = controller.router[i];
         const handler = controller[route.handler];
-        console.log(route.method, route.path, route.handler);
 
-        
-
-        router[route.method](route.path, async (ctx, next) =>
-          handler.call(controller, ctx, next)
+        router[route.method](
+          route.path,
+          ...route.middleware.map(m => m.pipe.bind(m)), // middleware
+          async (ctx, next) => handler.call(controller, ctx, next)
         );
       }
     }
