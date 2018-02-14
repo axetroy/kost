@@ -8,6 +8,17 @@ new App()
     enabled: {
       static: {
         mount: "/public"
+      },
+      proxy: {
+        mount: "/proxy",
+        options: {
+          target: "http://127.0.0.1:3000",
+          changeOrigin: true,
+          xfwd: true,
+          cookieDomainRewrite: true,
+          proxyTimeout: 1000 * 120, // 2分钟为超时
+          logs: true
+        }
       }
     }
   })

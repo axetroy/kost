@@ -7,13 +7,16 @@
     "example": "example"
   },
   "devDependencies": {
+    "@types/http-proxy": "^1.12.4",
     "@types/node": "^9.4.5",
     "ts-node": "^4.1.0",
     "typescript": "^2.7.1"
   },
   "dependencies": {
+    "https-proxy-agent": "^2.1.1",
     "koa": "^2.5.0",
     "koa-mount": "^3.0.0",
+    "koa-proxies": "^0.6.2",
     "koa-router": "^7.4.0",
     "koa-static": "^4.0.2",
     "reflect-metadata": "^0.1.12",

@@ -5,10 +5,17 @@ import * as Koa from "koa";
 import * as Router from "koa-router";
 import * as FileServer from "koa-static";
 import * as mount from "koa-mount";
+import * as proxyServer from "http-proxy";
 import { Container } from "typedi";
 
 import Controller, { Controller$ } from "./controller";
 import Service, { Service$ } from "./service";
+
+interface ProxyConfig$ extends proxyServer.ServerOptions {
+  rewrite?(path: string): string;
+  cookieDomainRewrite?: boolean;
+  logs?: boolean;
+}
 
 interface Config$ {
   cluster: number;
@@ -27,14 +34,8 @@ interface Config$ {
       };
     };
     proxy?: {
-      from: {
-        path: string;
-      };
-      to: {
-        host: string;
-        port: number;
-        path: string;
-      };
+      mount: string;
+      options: ProxyConfig$;
     };
   };
 }
@@ -70,7 +71,21 @@ class App implements App$ {
       );
     }
 
-    // 初始化service
+    if (config.enabled.proxy) {
+      const proxyServer = require("koa-proxies");
+      const proxy = config.enabled.proxy;
+      const options = proxy.options;
+
+      // if not set rewrite
+      if (!options.rewrite) {
+        options.rewrite = path =>
+          path.replace(new RegExp("^\\" + proxy.mount), "/");
+      }
+
+      this.app.use(proxyServer(proxy.mount, proxy.options));
+    }
+
+    // init service
     const services: Service$[] = serviceFiles
       .filter(
         serviceFile => [".js", ".ts"].indexOf(path.extname(serviceFile)) >= 0
@@ -94,7 +109,7 @@ class App implements App$ {
       }
     }
 
-    // 加载控制器
+    // load controller
     while (controllerFiles.length) {
       const controllerFile = controllerFiles.shift();
 
@@ -125,7 +140,7 @@ class App implements App$ {
 
     const router = new Router();
 
-    // 处理Controller
+    // resolve controller
     for (let controller of this.controllers) {
       for (let urlPath in controller.paths) {
         const methods = controller.paths[urlPath];
