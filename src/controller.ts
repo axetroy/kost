@@ -1,17 +1,17 @@
 import { App$ } from "./app";
 
-interface Paths$ {
-  [urlPath: string]: {
-    [httpMethod: string]: string; // function method name
-  };
+interface Router$ {
+  method: string;
+  path: string | RegExp;
+  handler: string;
 }
 
 export interface Controller$ {
   app: App$;
-  paths: Paths$;
+  router: Router$[];
 }
 
 export default class Controller implements Controller$ {
   public app: App$;
-  public paths: Paths$;
+  public router: Router$[];
 }

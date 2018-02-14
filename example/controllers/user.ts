@@ -13,6 +13,10 @@ class UserController extends Controller {
   async name(ctx, next) {
     ctx.body = await this.user.getUser();
   }
+  @GET(/^\/user\/\w/gi)
+  async info(ctx, next) {
+    ctx.body = "regular expression match";
+  }
 }
 
 export default UserController;

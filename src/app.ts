@@ -166,14 +166,16 @@ class App implements App$ {
 
     // resolve controller
     for (let controller of this.controllers) {
-      for (let urlPath in controller.paths) {
-        const methods = controller.paths[urlPath];
-        for (let httpMethod in methods) {
-          const handler = controller[methods[httpMethod]];
-          router[httpMethod.toLocaleLowerCase()](urlPath, async (ctx, next) =>
-            handler.call(controller, ctx, next)
-          );
-        }
+      for (let i = 0; i < controller.router.length; i++) {
+        const route = controller.router[i];
+        const handler = controller[route.handler];
+        console.log(route.method, route.path, route.handler);
+
+        
+
+        router[route.method](route.path, async (ctx, next) =>
+          handler.call(controller, ctx, next)
+        );
       }
     }
 
