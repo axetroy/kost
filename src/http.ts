@@ -17,7 +17,6 @@ function request(method: string, path: string) {
     target.paths[path] = target.paths[path] || {};
 
     target.paths[path][method] = propertyKey;
-
   };
 }
 
@@ -35,4 +34,12 @@ export function PUT(path: string) {
 
 export function DELETE(path: string) {
   return request("DELETE", path);
+}
+
+export function HEAD(path: string) {
+  return request("HEAD", path);
+}
+
+export function PATCH(path: string) {
+  return request("PATCH", path);
 }

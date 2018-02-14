@@ -4,8 +4,19 @@ import App from "./src/app";
 import Controller from "./src/controller";
 import Middleware from "./src/middleware";
 import Service from "./src/service";
-import { GET, POST, PUT, DELETE } from "./src/http";
+import { GET, POST, PUT, DELETE, HEAD, PATCH } from "./src/http";
 
 export default App;
 
-export { Controller, Service, Middleware, GET, POST, PUT, DELETE, Inject };
+export {
+  Controller,
+  Service,
+  Middleware,
+  Inject,
+  GET,
+  POST,
+  PUT,
+  DELETE,
+  HEAD,
+  PATCH
+};
