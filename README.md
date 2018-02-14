@@ -18,3 +18,4 @@ It base on Koa@2 and koa-router.
 * [x] Middleware support
 * [ ] Support different config file
 * [ ] Build in support timing tasks
+* [ ] Build in support Body parser

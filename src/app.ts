@@ -5,6 +5,7 @@ import * as Koa from "koa";
 import * as Router from "koa-router";
 import * as FileServer from "koa-static";
 import * as mount from "koa-mount";
+import * as bodyParser from "koa-bodyparser";
 import * as proxyServer from "http-proxy";
 import { Container } from "typedi";
 
@@ -16,6 +17,21 @@ interface ProxyConfig$ extends proxyServer.ServerOptions {
   rewrite?(path: string): string;
   cookieDomainRewrite?: boolean;
   logs?: boolean;
+}
+
+interface BodyParserConfig$ {
+  enableTypes?: string[];
+  encode?: string;
+  formLimit?: string;
+  jsonLimit?: string;
+  strict?: boolean;
+  detectJSON?: (ctx: Koa.Context) => boolean;
+  extendTypes?: {
+    json?: string[];
+    form?: string[];
+    text?: string[];
+  };
+  onerror?: (err: Error, ctx: Koa.Context) => void;
 }
 
 interface Config$ {
@@ -38,6 +54,8 @@ interface Config$ {
       mount: string;
       options: ProxyConfig$;
     };
+    cors?: boolean;
+    bodyParser?: boolean | BodyParserConfig$;
   };
 }
 
@@ -55,6 +73,17 @@ class App implements App$ {
     const staticDir = path.join(cwd, "static");
     const controllerFiles = fs.readdirSync(controllerDir);
     const serviceFiles = fs.readdirSync(serviceDir);
+
+    // body parser
+    if (config.enabled.bodyParser) {
+      let bodyParserConfig: BodyParserConfig$ = {};
+
+      // 如果传入一个Object
+      if (config.enabled.bodyParser !== true) {
+        bodyParserConfig = config.enabled.bodyParser;
+      }
+      this.app.use(bodyParser(bodyParserConfig));
+    }
 
     // enable the build in feature
     if (config.enabled.static) {

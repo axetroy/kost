@@ -18,7 +18,8 @@ new App()
           proxyTimeout: 1000 * 120, // 2分钟为超时
           logs: true
         }
-      }
+      },
+      bodyParser: true
     }
   })
   .then(function(ctx) {})
