@@ -17,7 +17,7 @@ It base on Koa@2 and koa-router.
 * [x] Service support
 * [ ] Support different config file
 
-** Build in Support**
+**Build in Support**
 
 * [x] Http/Websocket proxy
 * [x] Static file server
