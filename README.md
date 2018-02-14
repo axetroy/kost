@@ -15,6 +15,6 @@ It base on Koa@2 and koa-router.
 * [x] Decorator for router
 * [x] Build in proxy in easy way.
 * [x] Build in static file server
-* [ ] Middleware support
+* [x] Middleware support
 * [ ] Support different config file
 * [ ] Build in support timing tasks

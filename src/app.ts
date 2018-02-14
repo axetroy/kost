@@ -10,6 +10,7 @@ import { Container } from "typedi";
 
 import Controller, { Controller$ } from "./controller";
 import Service, { Service$ } from "./service";
+import Middleware, { Middleware$ } from "./middleware";
 
 interface ProxyConfig$ extends proxyServer.ServerOptions {
   rewrite?(path: string): string;
@@ -40,19 +41,13 @@ interface Config$ {
   };
 }
 
-interface AppService$ {
-  [name: string]: any;
-}
-
 export interface App$ {
-  service: AppService$;
   start(config: Config$): Promise<any>;
 }
 
 class App implements App$ {
   private app = new Koa();
   private controllers: Controller$[] = [];
-  public service: AppService$ = {};
   async start(config: Config$) {
     const cwd = process.cwd();
     const controllerDir = path.join(cwd, "controllers");
@@ -158,10 +153,41 @@ class App implements App$ {
     return this.app.listen(3000);
   }
   use(middlewareName: string, options = {}) {
-    // TODO: 查找对应的中间件(优先从本地查找，然后到node_modules)
+    let MiddlewareFactory;
 
-    // 加载对应的中间件
-    // this.app.use()
+    try {
+      const localMiddlewarePath = path.join(
+        process.cwd(),
+        "middlewares",
+        middlewareName
+      );
+      // require from local
+      MiddlewareFactory = require(localMiddlewarePath);
+    } catch (err) {
+      // require from node_modules
+      try {
+        MiddlewareFactory = require(middlewareName);
+      } catch (err) {
+        throw new Error(`Can not found the middleware ${middlewareName}`);
+      }
+    }
+
+    MiddlewareFactory = MiddlewareFactory.default
+      ? MiddlewareFactory.default
+      : MiddlewareFactory;
+
+    const middleware: Middleware$ = new MiddlewareFactory();
+
+    // if middleware is not inherit from Middleware
+    if (middleware instanceof Middleware === false) {
+      throw new Error(`Invalid middleware "${middlewareName}"`);
+    }
+
+    // set context and config for middleware
+    middleware.app = this;
+    middleware.config = options;
+
+    this.app.use(middleware.pipe.bind(middleware));
 
     return this;
   }
