@@ -1,5 +1,5 @@
 {
-  "name": "kost",
+  "name": "@axetroy/kost",
   "version": "0.0.1",
   "description": "The web framework base on Koa and Typescript for NodeJS",
   "main": "index.ts",
