@@ -1,14 +1,14 @@
-import { App$ } from "./app";
+import { Application$ } from "./app";
 
 export interface Service$ {
-  app: App$;
+  app: Application$;
   enable: boolean;
   level: number;
-  init(app: App$): Promise<any>;
+  init(app: Application$): Promise<any>;
 }
 
 export default class Service implements Service$ {
-  public app: App$;
+  public app: Application$;
   public level: number = 0; // the level of service
   public enable = true; // default true
   async init(): Promise<any> {}

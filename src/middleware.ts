@@ -1,9 +1,9 @@
 import * as path from "path";
-import { App$ } from "./app";
+import { Application$ } from "./app";
 import * as Koa from "koa";
 
 export interface Middleware$ {
-  app: App$;
+  app: Application$;
   config: any;
   pipe: Koa.Middleware;
 }
@@ -13,7 +13,7 @@ export interface MiddlewareFactory$ {
 }
 
 export default class Middleware implements Middleware$ {
-  public app: App$;
+  public app: Application$;
   public config: any = {};
   constructor(options) {
     this.config = options;

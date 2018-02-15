@@ -1,6 +1,6 @@
-import App from "../index";
+import Application from "../index";
 
-new App()
+new Application()
   .use("logger")
   .start({
     cluster: 4,

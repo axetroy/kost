@@ -59,11 +59,11 @@ interface Config$ {
   };
 }
 
-export interface App$ {
+export interface Application$ {
   start(config: Config$): Promise<any>;
 }
 
-class App implements App$ {
+class Application implements Application$ {
   private app = new Koa();
   private controllers: Controller$[] = [];
   async start(config: Config$) {
@@ -212,4 +212,4 @@ class App implements App$ {
   }
 }
 
-export default App;
+export default Application;

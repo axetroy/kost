@@ -1,4 +1,4 @@
-import { App$ } from "./app";
+import { Application$ } from "./app";
 import { MiddlewareFactory$ } from "./middleware";
 
 interface Router$ {
@@ -18,13 +18,13 @@ export interface ControllerFactory$ {
 }
 
 export interface Controller$ {
-  app: App$;
+  app: Application$;
   router: Router$[];
   middleware: Middleware$[];
 }
 
 export default class Controller implements Controller$ {
-  public app: App$;
+  public app: Application$;
   public router: Router$[];
   public middleware: Middleware$[];
 }
