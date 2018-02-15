@@ -116,9 +116,9 @@ class Application implements Application$ {
       )
       .map(serviceFile => {
         const filePath: string = path.join(serviceDir, serviceFile);
-        let YourService = require(filePath);
-        YourService = YourService.default ? YourService.default : Service;
-        const service = <Service$>Container.get(YourService);
+        let ServiceFactory = require(filePath);
+        ServiceFactory = ServiceFactory.default ? ServiceFactory.default : Service;
+        const service = <Service$>Container.get(ServiceFactory);
         if (service instanceof Service === false) {
           throw new Error(`The file ${filePath} is not a service file.`);
         }
