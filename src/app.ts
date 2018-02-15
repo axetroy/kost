@@ -173,10 +173,10 @@ class Application implements Application$ {
         // get the middleware for this route
         const middlewares = (controller.middleware || [])
           .filter(v => v.handler === route.handler)
-          .map(v => {
-            const middleware = new v.factory();
+          .map(m => {
+            const middleware = new m.factory();
             middleware.app = this;
-            middleware.config =v.options;
+            middleware.config = m.options;
             return middleware;
           });
 
@@ -195,7 +195,7 @@ class Application implements Application$ {
   use(middlewareName: string, options = {}) {
     const MiddlewareFactory = resolveMiddleware(middlewareName);
 
-    const middleware: Middleware$ = Container.get(MiddlewareFactory);
+    const middleware: Middleware$ = new MiddlewareFactory();
 
     // if middleware is not inherit from Middleware
     if (middleware instanceof Middleware === false) {
