@@ -1,9 +1,10 @@
-import { Controller, Inject, GET, USE } from "../../index";
+import { Controller, Inject, GET, USE, Context } from "../../index";
 
 import UserService from "../services/user";
 
 class UserController extends Controller {
   @Inject() user: UserService;
+  @Inject() context: Context;
 
   @GET("/")
   index(ctx, next) {
@@ -16,6 +17,7 @@ class UserController extends Controller {
   @GET(/^\/user\/\w/gi)
   @USE("logger")
   async info(ctx, next) {
+    console.log(this.context);
     ctx.body = "regular expression match";
   }
 }

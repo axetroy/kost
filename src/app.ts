@@ -6,58 +6,14 @@ import * as Router from "koa-router";
 import * as FileServer from "koa-static";
 import * as mount from "koa-mount";
 import * as bodyParser from "koa-bodyparser";
-import * as proxyServer from "http-proxy";
+import * as yaml from "js-yaml";
 import { Container } from "typedi";
 
 import Controller, { Controller$ } from "./controller";
 import Service, { Service$ } from "./service";
 import Middleware, { Middleware$, resolveMiddleware } from "./middleware";
-
-interface ProxyConfig$ extends proxyServer.ServerOptions {
-  rewrite?(path: string): string;
-  cookieDomainRewrite?: boolean;
-  logs?: boolean;
-}
-
-interface BodyParserConfig$ {
-  enableTypes?: string[];
-  encode?: string;
-  formLimit?: string;
-  jsonLimit?: string;
-  strict?: boolean;
-  detectJSON?: (ctx: Koa.Context) => boolean;
-  extendTypes?: {
-    json?: string[];
-    form?: string[];
-    text?: string[];
-  };
-  onerror?: (err: Error, ctx: Koa.Context) => void;
-}
-
-interface Config$ {
-  cluster: number;
-  enabled: {
-    static?: {
-      mount: string;
-      options?: {
-        maxage?: number;
-        hidden?: boolean;
-        index?: string;
-        defer?: boolean;
-        gzip?: boolean;
-        br?: boolean;
-        setHeaders(res: any, path: string, stats: any): any;
-        extensions?: boolean;
-      };
-    };
-    proxy?: {
-      mount: string;
-      options: ProxyConfig$;
-    };
-    cors?: boolean;
-    bodyParser?: boolean | BodyParserConfig$;
-  };
-}
+import { Config$, BodyParserConfig$ } from "./config";
+import Context from "./context";
 
 export interface Application$ {
   start(config: Config$): Promise<any>;
@@ -65,48 +21,73 @@ export interface Application$ {
 
 class Application implements Application$ {
   private app = new Koa();
-  private controllers: Controller$[] = [];
-  async start(config: Config$) {
+  async start(startOptions: Config$ = {}) {
     const cwd = process.cwd();
+    const configDir = path.join(cwd, "configs");
     const controllerDir = path.join(cwd, "controllers");
     const serviceDir = path.join(cwd, "services");
     const staticDir = path.join(cwd, "static");
     const controllerFiles = fs.readdirSync(controllerDir);
     const serviceFiles = fs.readdirSync(serviceDir);
 
-    // body parser
-    if (config.enabled.bodyParser) {
-      let bodyParserConfig: BodyParserConfig$ = {};
+    const app = this.app;
 
-      // 如果传入一个Object
-      if (config.enabled.bodyParser !== true) {
-        bodyParserConfig = config.enabled.bodyParser;
+    // create global context
+    const context = Container.get(Context);
+
+    // load default config
+    const defaultConfig = yaml.safeLoad(
+      fs.readFileSync(path.join(configDir, "default.yaml"), "utf8")
+    );
+
+    // load env config
+    const envConfig = yaml.safeLoad(
+      fs.readFileSync(
+        path.join(configDir, process.env.NODE_ENV + ".yaml"),
+        "utf8"
+      )
+    );
+
+    const config: any = Object.assign(defaultConfig, envConfig);
+
+    // set context;
+    context.config = config;
+    context.params = startOptions;
+
+    // enabled some feat
+    if (startOptions.enabled) {
+      const { bodyParser, proxy } = startOptions.enabled;
+      const staticServer = startOptions.enabled.static;
+      // body parser
+      if (bodyParser) {
+        let bodyParserConfig: BodyParserConfig$ = {};
+
+        // 如果传入一个Object
+        if (bodyParser !== true) {
+          bodyParserConfig = bodyParser;
+        }
+        app.use(require("koa-bodyparser")(bodyParserConfig));
       }
-      this.app.use(bodyParser(bodyParserConfig));
-    }
 
-    // enable the build in feature
-    if (config.enabled.static) {
-      this.app.use(
-        mount(
-          config.enabled.static.mount,
-          FileServer(staticDir, config.enabled.static.options)
-        )
-      );
-    }
-
-    if (config.enabled.proxy) {
-      const proxyServer = require("koa-proxies");
-      const proxy = config.enabled.proxy;
-      const options = proxy.options;
-
-      // if not set rewrite
-      if (!options.rewrite) {
-        options.rewrite = path =>
-          path.replace(new RegExp("^\\" + proxy.mount), "/");
+      // enable the build in feature
+      if (staticServer) {
+        app.use(
+          mount(staticServer.mount, FileServer(staticDir, staticServer.options))
+        );
       }
 
-      this.app.use(proxyServer(proxy.mount, proxy.options));
+      if (proxy) {
+        const proxyServer = require("koa-proxies");
+        const options = proxy.options;
+
+        // if not set rewrite
+        if (!options.rewrite) {
+          options.rewrite = path =>
+            path.replace(new RegExp("^\\" + proxy.mount), "/");
+        }
+
+        app.use(proxyServer(proxy.mount, proxy.options));
+      }
     }
 
     // init service
@@ -117,7 +98,9 @@ class Application implements Application$ {
       .map(serviceFile => {
         const filePath: string = path.join(serviceDir, serviceFile);
         let ServiceFactory = require(filePath);
-        ServiceFactory = ServiceFactory.default ? ServiceFactory.default : Service;
+        ServiceFactory = ServiceFactory.default
+          ? ServiceFactory.default
+          : Service;
         const service = <Service$>Container.get(ServiceFactory);
         if (service instanceof Service === false) {
           throw new Error(`The file ${filePath} is not a service file.`);
@@ -132,6 +115,8 @@ class Application implements Application$ {
         await service.init(this);
       }
     }
+
+    const controllers: Controller$[] = [];
 
     // load controller
     while (controllerFiles.length) {
@@ -153,8 +138,7 @@ class Application implements Application$ {
               throw new Error(`The file ${filePath} is not a controller file.`);
             }
 
-            ctrl.app = this;
-            this.controllers.push(ctrl);
+            controllers.push(ctrl);
             break;
           default:
             break;
@@ -165,7 +149,7 @@ class Application implements Application$ {
     const router = new Router();
 
     // resolve controller
-    for (let controller of this.controllers) {
+    for (let controller of controllers) {
       for (let i = 0; i < controller.router.length; i++) {
         const route = controller.router[i];
         const handler = controller[route.handler];
@@ -175,7 +159,6 @@ class Application implements Application$ {
           .filter(v => v.handler === route.handler)
           .map(m => {
             const middleware = new m.factory();
-            middleware.app = this;
             middleware.config = m.options;
             return middleware;
           });
@@ -188,11 +171,12 @@ class Application implements Application$ {
       }
     }
 
-    this.app.use(router.routes()).use(router.allowedMethods());
+    app.use(router.routes()).use(router.allowedMethods());
 
-    return this.app.listen(3000);
+    return app.listen(3000);
   }
   use(middlewareName: string, options = {}) {
+    const app = this.app;
     const MiddlewareFactory = resolveMiddleware(middlewareName);
 
     const middleware: Middleware$ = new MiddlewareFactory();
@@ -203,10 +187,9 @@ class Application implements Application$ {
     }
 
     // set context and config for middleware
-    middleware.app = this;
     middleware.config = options;
 
-    this.app.use(middleware.pipe.bind(middleware));
+    app.use(middleware.pipe.bind(middleware));
 
     return this;
   }

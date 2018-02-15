@@ -15,7 +15,7 @@ It base on Koa@2 and koa-router.
 * [x] Decorator for router
 * [x] Middleware support
 * [x] Service support
-* [ ] Support different config file
+* [x] Support Customer config for different environment
 
 **Build in Support**
 
@@ -25,7 +25,30 @@ It base on Koa@2 and koa-router.
 * [ ] View engine
 * [ ] Cron task
 
+### Quickly start
+
+```bash
+npm install @axetroy/kost --save
+```
+
+```typescript
+import Kost from "@axetroy/kost";
+
+new Kost().start().catch(function(err) {
+  console.error(err);
+});
+```
+
+## Contributors
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+
+| [<img src="https://avatars1.githubusercontent.com/u/9758711?v=3" width="100px;"/><br /><sub>Axetroy</sub>](http://axetroy.github.io)<br />[💻](https://github.com/axetroy/kost/commits?author=axetroy) 🔌 [⚠️](https://github.com/axetroy/kost/commits?author=axetroy) [🐛](https://github.com/axetroy/kost/issues?q=author%3Aaxetroy) 🎨 |
+| :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
 ## License
 
 The [MIT License](https://github.com/axetroy/kost/blob/master/LICENSE)
-

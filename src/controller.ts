@@ -18,13 +18,11 @@ export interface ControllerFactory$ {
 }
 
 export interface Controller$ {
-  app: Application$;
   router: Router$[];
   middleware: Middleware$[];
 }
 
 export default class Controller implements Controller$ {
-  public app: Application$;
   public router: Router$[];
   public middleware: Middleware$[];
 }

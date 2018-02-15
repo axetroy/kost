@@ -1,0 +1,4 @@
+env: development
+database:
+  host: 1234
+  port: 2345
