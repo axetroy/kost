@@ -11,7 +11,7 @@ import { Container } from "typedi";
 
 import Controller, { Controller$ } from "./controller";
 import Service, { Service$ } from "./service";
-import Middleware, { Middleware$ } from "./middleware";
+import Middleware, { Middleware$, resolveMiddleware } from "./middleware";
 
 interface ProxyConfig$ extends proxyServer.ServerOptions {
   rewrite?(path: string): string;
@@ -193,28 +193,7 @@ class App implements App$ {
     return this.app.listen(3000);
   }
   use(middlewareName: string, options = {}) {
-    let MiddlewareFactory;
-
-    try {
-      const localMiddlewarePath = path.join(
-        process.cwd(),
-        "middlewares",
-        middlewareName
-      );
-      // require from local
-      MiddlewareFactory = require(localMiddlewarePath);
-    } catch (err) {
-      // require from node_modules
-      try {
-        MiddlewareFactory = require(middlewareName);
-      } catch (err) {
-        throw new Error(`Can not found the middleware ${middlewareName}`);
-      }
-    }
-
-    MiddlewareFactory = MiddlewareFactory.default
-      ? MiddlewareFactory.default
-      : MiddlewareFactory;
+    const MiddlewareFactory = resolveMiddleware(middlewareName);
 
     const middleware: Middleware$ = new MiddlewareFactory();
 
