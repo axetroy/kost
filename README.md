@@ -24,3 +24,8 @@ It base on Koa@2 and koa-router.
 * [x] Body parser
 * [ ] View engine
 * [ ] Cron task
+
+## License
+
+The [MIT License](https://github.com/axetroy/kost/blob/master/LICENSE)
+
