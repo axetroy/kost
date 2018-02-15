@@ -170,9 +170,19 @@ class App implements App$ {
         const route = controller.router[i];
         const handler = controller[route.handler];
 
+        // get the middleware for this route
+        const middlewares = (controller.middleware || [])
+          .filter(v => v.handler === route.handler)
+          .map(m => {
+            const middleware = new m.factory();
+            middleware.app = this;
+            middleware.config = m.options;
+            return middleware;
+          });
+
         router[route.method](
           route.path,
-          ...route.middleware.map(m => m.pipe.bind(m)), // middleware
+          ...middlewares.map(m => m.pipe.bind(m)), // middleware
           async (ctx, next) => handler.call(controller, ctx, next)
         );
       }

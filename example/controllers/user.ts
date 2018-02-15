@@ -1,4 +1,4 @@
-import { Controller, Inject, GET } from "../../index";
+import { Controller, Inject, GET, USE } from "../../index";
 
 import UserService from "../services/user";
 
@@ -14,6 +14,7 @@ class UserController extends Controller {
     ctx.body = await this.user.getUser();
   }
   @GET(/^\/user\/\w/gi)
+  @USE("logger")
   async info(ctx, next) {
     ctx.body = "regular expression match";
   }
