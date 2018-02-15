@@ -15,8 +15,8 @@ export interface Context$ {
 let haveInit: boolean = false;
 
 export default class Context implements Context$ {
-  config: any; // 加载的配置文件
-  params: Config$; // 启动参数
+  config: any = {}; // 加载的配置文件
+  params: Config$ = {}; // 启动参数
   constructor() {
     if (haveInit) {
       throw new Error(

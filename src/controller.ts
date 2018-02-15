@@ -23,6 +23,6 @@ export interface Controller$ {
 }
 
 export default class Controller implements Controller$ {
-  public router: Router$[];
-  public middleware: Middleware$[];
+  public router: Router$[] = [];
+  public middleware: Middleware$[] = [];
 }
