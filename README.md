@@ -31,12 +31,42 @@ It base on Koa@2 and koa-router.
 npm install @axetroy/kost --save
 ```
 
+Here is the project
+
+```
+.
+├── app.ts
+├── configs
+│   ├── default.yaml
+│   ├── development.yaml
+│   ├── production.yaml
+│   └── test.yaml
+├── controllers
+│   ├── todo.ts
+│   └── user.ts
+├── middlewares
+│   └── logger.ts
+├── services
+│   ├── orm.ts
+│   └── user.ts
+├── static
+│   └── test.text
+├── tsconfig.json
+└── views
+    └── index.html
+```
+
 ```typescript
+// app.ts
 import Kost from "@axetroy/kost";
 
 new Kost().start().catch(function(err) {
   console.error(err);
 });
+```
+
+```bash
+$ ts-node ./app.ts
 ```
 
 ## Contributors
