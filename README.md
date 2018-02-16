@@ -23,7 +23,7 @@ It base on Koa@2 and koa-router.
 * [x] Static file server
 * [x] Body parser
 * [x] View engine
-* [ ] Cross-Origin Resource Sharing
+* [x] Cross-Origin Resource Sharing
 * [ ] Cron task
 
 ### Quickly start

@@ -3,8 +3,8 @@ import Application from "../index";
 new Application()
   .use("logger")
   .start({
-    cluster: 4,
     enabled: {
+      cors: true,
       static: {
         mount: "/public"
       },

@@ -41,8 +41,18 @@ export interface ViewConfig$ {
   engineSource?: any;
 }
 
+type originHandler = (ctx: Koa.Request) => string;
+
+export interface CorsConfig$ {
+  origin?: string | boolean | originHandler;
+  expose?: string[];
+  maxAge?: number;
+  credentials?: boolean;
+  methods?: string[];
+  headers?: string[];
+}
+
 export interface Config$ {
-  cluster?: number;
   enabled?: {
     static?: {
       mount: string;
@@ -61,7 +71,7 @@ export interface Config$ {
       mount: string;
       options: ProxyConfig$;
     };
-    cors?: boolean;
+    cors?: boolean | CorsConfig$;
     bodyParser?: boolean | BodyParserConfig$;
     view?: boolean | ViewConfig$;
   };

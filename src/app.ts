@@ -12,7 +12,7 @@ import { Container } from "typedi";
 import Controller, { Controller$ } from "./controller";
 import Service, { Service$ } from "./service";
 import Middleware, { Middleware$, resolveMiddleware } from "./middleware";
-import { Config$, BodyParserConfig$, ViewConfig$ } from "./config";
+import { Config$, BodyParserConfig$, ViewConfig$, CorsConfig$ } from "./config";
 import Context from "./context";
 
 export interface Application$ {
@@ -56,7 +56,7 @@ class Application implements Application$ {
 
     // enabled some feat
     if (startOptions.enabled) {
-      const { bodyParser, proxy, view } = startOptions.enabled;
+      const { bodyParser, proxy, view, cors } = startOptions.enabled;
       const staticServer = startOptions.enabled.static;
       // enable body parser
       if (bodyParser) {
@@ -98,6 +98,16 @@ class Application implements Application$ {
         }
         const views = require("koa-views");
         app.use(views(path.join(cwd, "views"), viewConfig));
+      }
+
+      // enable cors
+      if (cors) {
+        let corsConfig: CorsConfig$ = {};
+        if (cors !== true) {
+          corsConfig = cors;
+        }
+        const corsMiddleware = require("koa-cors");
+        app.use(corsMiddleware(corsConfig));
       }
     }
 
