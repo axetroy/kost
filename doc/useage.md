@@ -4,28 +4,29 @@
   * [How to write a controller?](#how-to-write-a-controller)
   * [How to use service in controller?](#how-to-use-service-in-controller)
   * [How to get app context in controller?](#how-to-get-app-context-in-controller)
+  * [How to use a middleware for in controller?](#how-to-use-a-middleware-for-in-controller)
 * [Middleware](#middleware)
   * [How to write a middleware?](#how-to-write-a-middleware)
   * [How to reuse the Koa middleware?](#how-to-reuse-the-koa-middleware)
   * [How to use a middleware for global request?](#how-to-use-a-middleware-for-global-request)
   * [How to use a middleware for in controller?](#how-to-use-a-middleware-for-in-controller)
 * [Service](#service)
-  - [How to write a service?](#how-to-write-a-service)
-  - [How to use service?](#how-to-use-service)
-  - [How to inject another service?](#how-to-inject-another-service)
-  - [How to init service?](#how-to-init-service)
+  * [How to write a service?](#how-to-write-a-service)
+  * [How to use service?](#how-to-use-service)
+  * [How to inject another service?](#how-to-inject-another-service)
+  * [How to init service?](#how-to-init-service)
 
 ## Controller
 
 Controller is a class to controller how to organize your api.
 
-This class will be call ``new Controller`` once.
+This class will be call `new Controller` once.
 
-use decorators ``@GET()``、``@POST()``、``@PUT``... to controller api path.
+use decorators `@GET()`、`@POST()`、`@PUT`... to controller api path.
 
-use decorators ``@USE`` to config the middleware for this path.
+use decorators `@USE` to config the middleware for this path.
 
-use decorators ``Inject()`` to inject service
+use decorators `Inject()` to inject service
 
 ### How to write a controller?
 
@@ -119,6 +120,14 @@ export default UserController;
 
 ## Middleware
 
+middleware is a class wrap with koa middleware.
+
+It must implements with `pipe(ctx, next)` method
+
+It can use in global request and specify path
+
+It support load from `/project/middlewares/xxx.ts` and `node_modules`
+
 ### How to write a middleware?
 
 Create a middle file in `/project/middlewares`
@@ -200,6 +209,16 @@ export default UserController;
 ```
 
 ## Service
+
+service is a class which can be use in controller and other service, even in middleware.
+
+use `Inject()`, you can use in everywhere.
+
+What different with Controller?
+
+* [x] service is injectable class, can be inject into Controller/Service/Middleware
+* [x] service's logic can be reused.
+* [x] service can be init, sort by `level` property
 
 ### How to write a service?
 
