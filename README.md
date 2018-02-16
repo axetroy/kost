@@ -117,7 +117,7 @@ export default class extends Middleware {
 
 #### How to use a middleware for global request?
 
-If you have create a middleware([How to write a middleware?](#How to write a middleware?))
+If you have create a middleware([How to write a middleware?](#how-to-write-a-middleware?))
 
 then you should start your app with `app.use(middlewareName, options)`
 
