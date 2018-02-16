@@ -52,21 +52,21 @@ export interface CorsConfig$ {
   headers?: string[];
 }
 
+export interface StaticFileServerConfig$ {
+  mount: string;
+  maxage?: number;
+  hidden?: boolean;
+  index?: string;
+  defer?: boolean;
+  gzip?: boolean;
+  br?: boolean;
+  setHeaders?(res: any, path: string, stats: any): any;
+  extensions?: boolean;
+}
+
 export interface Config$ {
   enabled?: {
-    static?: {
-      mount: string;
-      options?: {
-        maxage?: number;
-        hidden?: boolean;
-        index?: string;
-        defer?: boolean;
-        gzip?: boolean;
-        br?: boolean;
-        setHeaders?(res: any, path: string, stats: any): any;
-        extensions?: boolean;
-      };
-    };
+    static?: boolean | StaticFileServerConfig$;
     proxy?: {
       mount: string;
       options: ProxyConfig$;

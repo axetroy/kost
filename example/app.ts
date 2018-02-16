@@ -5,12 +5,7 @@ new Application()
   .start({
     enabled: {
       cors: true,
-      static: {
-        mount: "/public",
-        options:{
-          
-        }
-      },
+      static: true,
       proxy: {
         mount: "/proxy",
         options: {

@@ -11,7 +11,13 @@ import { Container } from "typedi";
 import Controller, { Controller$ } from "./controller";
 import Service, { Service$ } from "./service";
 import Middleware, { Middleware$, resolveMiddleware } from "./middleware";
-import { Config$, BodyParserConfig$, ViewConfig$, CorsConfig$ } from "./config";
+import {
+  Config$,
+  BodyParserConfig$,
+  ViewConfig$,
+  CorsConfig$,
+  StaticFileServerConfig$
+} from "./config";
 import Context from "./context";
 
 export interface Application$ {
@@ -71,8 +77,23 @@ class Application implements Application$ {
       // enable static file server
       if (staticServer) {
         const FileServer = require("koa-static");
+        let StaticFileServerConfig: StaticFileServerConfig$ = {
+          mount: "/static"
+        };
+
+        // if pass an object
+        if (staticServer !== true) {
+          StaticFileServerConfig = Object.assign(
+            StaticFileServerConfig,
+            staticServer
+          );
+        }
+
         app.use(
-          mount(staticServer.mount, FileServer(staticDir, staticServer.options))
+          mount(
+            StaticFileServerConfig.mount,
+            FileServer(staticDir, StaticFileServerConfig)
+          )
         );
       }
 
