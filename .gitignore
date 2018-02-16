@@ -2,3 +2,4 @@ node_modules
 *.log
 .vscode
 build
+.nyc_output

@@ -24,16 +24,16 @@ export default class Middleware implements Middleware$ {
 /**
  * 通过中间件的字符串，获取中间件类
  * @param middlewareName
+ * @param cwd
  */
-export function resolveMiddleware(middlewareName: string): MiddlewareFactory$ {
+export function resolveMiddleware(
+  middlewareName: string,
+  cwd: string = process.cwd()
+): MiddlewareFactory$ {
   let MiddlewareFactory: MiddlewareFactory$;
   let moduleOutput: any;
   try {
-    const localMiddlewarePath = path.join(
-      process.cwd(),
-      "middlewares",
-      middlewareName
-    );
+    const localMiddlewarePath = path.join(cwd, "middlewares", middlewareName);
     // require from local
     moduleOutput = require(localMiddlewarePath);
   } catch (err) {
@@ -41,7 +41,7 @@ export function resolveMiddleware(middlewareName: string): MiddlewareFactory$ {
     try {
       moduleOutput = require(middlewareName);
     } catch (err) {
-      throw new Error(`Can not found the middleware ${middlewareName}`);
+      throw new Error(`Can not found the middleware "${middlewareName}"`);
     }
   }
 
