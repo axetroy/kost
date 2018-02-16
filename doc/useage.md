@@ -4,12 +4,12 @@
   * [How to write a controller?](#how-to-write-a-controller)
   * [How to use service in controller?](#how-to-use-service-in-controller)
   * [How to get app context in controller?](#how-to-get-app-context-in-controller)
-  * [How to use a middleware for in controller?](#how-to-use-a-middleware-for-in-controller)
+  * [How to use a middleware in controller?](#how-to-use-a-middleware-for-in-controller)
 * [Middleware](#middleware)
   * [How to write a middleware?](#how-to-write-a-middleware)
   * [How to reuse the Koa middleware?](#how-to-reuse-the-koa-middleware)
   * [How to use a middleware for global request?](#how-to-use-a-middleware-for-global-request)
-  * [How to use a middleware for in controller?](#how-to-use-a-middleware-for-in-controller)
+  * [How to use a middleware in controller?](#how-to-use-a-middleware-for-in-controller)
 * [Service](#service)
   * [How to write a service?](#how-to-write-a-service)
   * [How to use service?](#how-to-use-service)
@@ -188,7 +188,7 @@ new Kost()
   });
 ```
 
-### How to use a middleware for in controller?
+### How to use a middleware in controller?
 
 Here is a controller
 
