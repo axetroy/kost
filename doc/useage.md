@@ -17,6 +17,16 @@
 
 ### Controller
 
+Controller is a class to controller how to organize your api.
+
+This class will be call ``new Controller`` once.
+
+use decorators ``@GET()``、``@POST()``、``@PUT``... to controller api path.
+
+use decorators ``@USE`` to config the middleware for this path.
+
+use decorators ``Inject()`` to inject service
+
 #### How to write a controller?
 
 Create a controller file in `/project/controllers`
