@@ -1,8 +1,100 @@
 ## Document
 
-- [Controller](#controller)
-- [Middleware](#middleware)
-- [Service](#service)
+* [Controller](#controller)
+* [Middleware](#middleware)
+* [Service](#service)
+
+### Controller
+
+#### How to write a controller
+
+Create a middle file in `/project/controllers`
+
+example: `/project/controllers/user.ts`
+
+```typescript
+// /project/controllers/user.ts
+
+import { Controller, GET, POST, DELETE } from "@axetroy/kost";
+
+class UserController extends Controller {
+  @GET("/")
+  async index(ctx, next) {
+    ctx.body = "hello kost";
+  }
+  @POST("/login")
+  async login(ctx, next) {
+    ctx.body = "login success";
+  }
+  @DELETE("/logout")
+  async logout(ctx, next) {
+    ctx.body = "logout success";
+  }
+}
+
+export default UserController;
+```
+
+#### How to use service in controller
+
+If you have define a service in `/project/services/user.ts`
+
+```typescript
+import { Service, Inject } from "@axetroy/kost";
+
+class UserService extends Service {
+  async getUser(username: string) {
+    return {
+      name: username,
+      age: 21,
+      address: "unknown"
+    };
+  }
+}
+
+export default UserService;
+```
+
+```typescript
+// /project/controllers/user.ts
+
+import { Controller, GET, Inject } from "@axetroy/kost";
+import UserService from "../services/user";
+
+class UserController extends Controller {
+  @Inject() user: UserService;
+  @GET("/:username")
+  async getUserInfo(ctx, next) {
+    const userInfo = await this.user.getUserInfo(ctx.params.username);
+    ctx.body = userInfo;
+  }
+}
+
+export default UserController;
+```
+
+#### How to get app context in controller
+
+The app context include some useful information
+
+* [x] The project config
+* [x] The bootstrap params(argument for start)
+
+```typescript
+// /project/controllers/user.ts
+
+import { Controller, GET, Inject, Context } from "@axetroy/kost";
+
+class UserController extends Controller {
+  @Inject() context: Context;
+  @GET("/context")
+  async getTheAppContext(ctx, next) {
+    ctx.body = this.context;
+  }
+}
+
+export default UserController;
+```
 
 ### Middleware
 
@@ -86,15 +178,9 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-### Controller
+### Service
 
-#### How to write a controller
-
-#### How to use service in controller
-
-#### How to get app context in controller
-
-### How to write a service
+#### How to write a service
 
 #### How to use service
 
