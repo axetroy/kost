@@ -19,7 +19,8 @@ new Application()
           logs: true
         }
       },
-      bodyParser: true
+      bodyParser: true,
+      view: true
     }
   })
   .then(function(ctx) {})

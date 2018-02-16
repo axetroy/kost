@@ -22,6 +22,25 @@ export interface BodyParserConfig$ {
   onerror?: (err: Error, ctx: Koa.Context) => void;
 }
 
+export interface ViewConfig$ {
+  /*
+    * default extension for your views
+    */
+  extension?: string;
+  /*
+    * these options will get passed to the view engine
+    */
+  options?: any;
+  /*
+    * map a file extension to an engine
+    */
+  map?: any;
+  /*
+    * replace consolidate as default engine source
+    */
+  engineSource?: any;
+}
+
 export interface Config$ {
   cluster?: number;
   enabled?: {
@@ -44,5 +63,6 @@ export interface Config$ {
     };
     cors?: boolean;
     bodyParser?: boolean | BodyParserConfig$;
+    view?: boolean | ViewConfig$;
   };
 }

@@ -10,6 +10,10 @@ class UserController extends Controller {
   index(ctx, next) {
     ctx.body = "hello world";
   }
+  @GET("/hello")
+  async say(ctx, next) {
+    await ctx.render("index.html");
+  }
   @GET("/whoami")
   async name(ctx, next) {
     ctx.body = await this.user.getUser();

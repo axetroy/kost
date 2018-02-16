@@ -22,7 +22,8 @@ It base on Koa@2 and koa-router.
 * [x] Http/Websocket proxy
 * [x] Static file server
 * [x] Body parser
-* [ ] View engine
+* [x] View engine
+* [ ] Cross-Origin Resource Sharing
 * [ ] Cron task
 
 ### Quickly start

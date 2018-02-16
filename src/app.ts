@@ -12,7 +12,7 @@ import { Container } from "typedi";
 import Controller, { Controller$ } from "./controller";
 import Service, { Service$ } from "./service";
 import Middleware, { Middleware$, resolveMiddleware } from "./middleware";
-import { Config$, BodyParserConfig$ } from "./config";
+import { Config$, BodyParserConfig$, ViewConfig$ } from "./config";
 import Context from "./context";
 
 export interface Application$ {
@@ -56,9 +56,9 @@ class Application implements Application$ {
 
     // enabled some feat
     if (startOptions.enabled) {
-      const { bodyParser, proxy } = startOptions.enabled;
+      const { bodyParser, proxy, view } = startOptions.enabled;
       const staticServer = startOptions.enabled.static;
-      // body parser
+      // enable body parser
       if (bodyParser) {
         let bodyParserConfig: BodyParserConfig$ = {};
 
@@ -69,13 +69,14 @@ class Application implements Application$ {
         app.use(require("koa-bodyparser")(bodyParserConfig));
       }
 
-      // enable the build in feature
+      // enable static file server
       if (staticServer) {
         app.use(
           mount(staticServer.mount, FileServer(staticDir, staticServer.options))
         );
       }
 
+      // enable proxy
       if (proxy) {
         const proxyServer = require("koa-proxies");
         const options = proxy.options;
@@ -87,6 +88,16 @@ class Application implements Application$ {
         }
 
         app.use(proxyServer(proxy.mount, proxy.options));
+      }
+
+      // enable the view engine
+      if (view) {
+        let viewConfig: ViewConfig$ = {};
+        if (view !== true) {
+          viewConfig = view;
+        }
+        const views = require("koa-views");
+        app.use(views(path.join(cwd, "views"), viewConfig));
       }
     }
 
