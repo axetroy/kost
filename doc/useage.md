@@ -13,7 +13,7 @@
   - [How to write a service?](#how-to-write-a-service)
   - [How to use service?](#how-to-use-service)
   - [How to inject another service?](#how-to-inject-another-service)
-  - [How to init service?](#how-to-init-service?)
+  - [How to init service?](#how-to-init-service)
 
 ### Controller
 
