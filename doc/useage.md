@@ -1,14 +1,25 @@
 ## Document
 
 * [Controller](#controller)
+  * [How to write a controller?](#how-to-write-a-controller)
+  * [How to use service in controller?](#how-to-use-service-in-controller)
+  * [How to get app context in controller?](#how-to-get-app-context-in-controller)
 * [Middleware](#middleware)
+  * [How to write a middleware?](#how-to-write-a-middleware)
+  * [How to reuse the Koa middleware?](#how-to-reuse-the-koa-middleware)
+  * [How to use a middleware for global request?](#how-to-use-a-middleware-for-global-request)
+  * [How to use a middleware for in controller?](#how-to-use-a-middleware-for-in-controller)
 * [Service](#service)
+  - [How to write a service?](#how-to-write-a-service)
+  - [How to use service?](#how-to-use-service)
+  - [How to inject another service?](#how-to-inject-another-service)
+  - [How to init service?](#how-to-init-service?)
 
 ### Controller
 
-#### How to write a controller
+#### How to write a controller?
 
-Create a middle file in `/project/controllers`
+Create a controller file in `/project/controllers`
 
 example: `/project/controllers/user.ts`
 
@@ -35,12 +46,12 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-#### How to use service in controller
+#### How to use service in controller?
 
 If you have define a service in `/project/services/user.ts`
 
 ```typescript
-import { Service, Inject } from "@axetroy/kost";
+import { Service } from "@axetroy/kost";
 
 class UserService extends Service {
   async getUser(username: string) {
@@ -73,7 +84,7 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-#### How to get app context in controller
+#### How to get app context in controller?
 
 The app context include some useful information
 
@@ -180,8 +191,99 @@ export default UserController;
 
 ### Service
 
-#### How to write a service
+#### How to write a service?
 
-#### How to use service
+Create a controller file in `/project/services`
 
-#### How to inject another service
+example: `/project/services/user.ts`
+
+```typescript
+import { Service } from "@axetroy/kost";
+
+class UserService extends Service {
+  async getUser(username: string) {
+    return {
+      name: username,
+      age: 21,
+      address: "unknown"
+    };
+  }
+}
+
+export default UserService;
+```
+
+#### How to use service?
+
+There a three way to use service
+
+1. Inject into controller
+2. Inject into another service
+3. Inject into middleware
+
+Here is an example to use in controller
+
+```typescript
+// /project/controllers/user.ts
+
+import { Controller, GET, Inject } from "@axetroy/kost";
+import UserService from "../services/user";
+
+class UserController extends Controller {
+  @Inject() user: UserService;
+  @GET("/:username")
+  async getUserInfo(ctx, next) {
+    const userInfo = await this.user.getUserInfo(ctx.params.username);
+    ctx.body = userInfo;
+  }
+}
+
+export default UserController;
+```
+
+#### How to inject another service?
+
+#### How to init service?
+
+You can declare the service's level to init it.
+
+for example, we got 2 service to init.
+
+* /project/services/orm.ts
+* /project/services/initUser.ts
+
+If we want init `orm.ts` first then init `initUser.ts`
+
+You can define you service's level
+
+```typescript
+import { Service } from "@axetroy/kost";
+
+class OrmService extends Service {
+  level: 100; // set the level for this service, default: 0
+  async init() {
+    // create an connection for database
+  }
+  async query(sql: string) {
+    // do something job
+  }
+}
+
+export default OrmService;
+```
+
+```typescript
+import { Service } from "@axetroy/kost";
+
+class InitUserService extends Service {
+  level: 99; // set the level for this service, default: 0
+  async init() {
+    // create user if doest not exist
+  }
+  async createUser(sql: string) {
+    // do something job
+  }
+}
+
+export default InitUserService;
+```
