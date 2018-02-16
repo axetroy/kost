@@ -1,4 +1,4 @@
-## Document
+# Document
 
 * [Controller](#controller)
   * [How to write a controller?](#how-to-write-a-controller)
@@ -15,7 +15,7 @@
   - [How to inject another service?](#how-to-inject-another-service)
   - [How to init service?](#how-to-init-service)
 
-### Controller
+## Controller
 
 Controller is a class to controller how to organize your api.
 
@@ -27,7 +27,7 @@ use decorators ``@USE`` to config the middleware for this path.
 
 use decorators ``Inject()`` to inject service
 
-#### How to write a controller?
+### How to write a controller?
 
 Create a controller file in `/project/controllers`
 
@@ -56,7 +56,7 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-#### How to use service in controller?
+### How to use service in controller?
 
 If you have define a service in `/project/services/user.ts`
 
@@ -94,7 +94,7 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-#### How to get app context in controller?
+### How to get app context in controller?
 
 The app context include some useful information
 
@@ -117,9 +117,9 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-### Middleware
+## Middleware
 
-#### How to write a middleware?
+### How to write a middleware?
 
 Create a middle file in `/project/middlewares`
 
@@ -140,7 +140,7 @@ export default class extends Middleware {
 }
 ```
 
-#### How to reuse the Koa middleware?
+### How to reuse the Koa middleware?
 
 If I want to use a Koa middleware, like [koa-cors](https://github.com/evert0n/koa-cors)
 
@@ -160,7 +160,7 @@ export default class extends Middleware {
 }
 ```
 
-#### How to use a middleware for global request?
+### How to use a middleware for global request?
 
 If you have create a middleware([How to write a middleware?](#how-to-write-a-middleware))
 
@@ -179,7 +179,7 @@ new Kost()
   });
 ```
 
-#### How to use a middleware for in controller?
+### How to use a middleware for in controller?
 
 Here is a controller
 
@@ -199,9 +199,9 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-### Service
+## Service
 
-#### How to write a service?
+### How to write a service?
 
 Create a controller file in `/project/services`
 
@@ -223,7 +223,7 @@ class UserService extends Service {
 export default UserService;
 ```
 
-#### How to use service?
+### How to use service?
 
 There a three way to use service
 
@@ -251,9 +251,9 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-#### How to inject another service?
+### How to inject another service?
 
-#### How to init service?
+### How to init service?
 
 You can declare the service's level to init it.
 
