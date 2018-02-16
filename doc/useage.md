@@ -72,10 +72,7 @@ import Application from "@axetroy/kost";
 new Application()
   .start({
     enabled: {
-      static: {
-        mount: "/public",
-        options: {} // https://github.com/koajs/static#options
-      }
+      static: true // or you can pass an object, see https://github.com/koajs/static#options
     }
   })
   .catch(function(err) {
