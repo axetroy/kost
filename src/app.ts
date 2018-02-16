@@ -3,7 +3,6 @@ import * as fs from "fs";
 import * as path from "path";
 import * as Koa from "koa";
 import * as Router from "koa-router";
-import * as FileServer from "koa-static";
 import * as mount from "koa-mount";
 import * as bodyParser from "koa-bodyparser";
 import * as yaml from "js-yaml";
@@ -71,6 +70,7 @@ class Application implements Application$ {
 
       // enable static file server
       if (staticServer) {
+        const FileServer = require("koa-static");
         app.use(
           mount(staticServer.mount, FileServer(staticDir, staticServer.options))
         );

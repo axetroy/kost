@@ -6,7 +6,10 @@ new Application()
     enabled: {
       cors: true,
       static: {
-        mount: "/public"
+        mount: "/public",
+        options:{
+          
+        }
       },
       proxy: {
         mount: "/proxy",

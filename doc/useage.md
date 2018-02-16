@@ -1,5 +1,13 @@
 # Document
 
+* [Build in feature](#build-in-feature)
+
+  * [Proxy](#proxy)
+  * [Static file server](#static-file-server)
+  * [Body parser](#body-parser)
+  * [View engine](#view-engine)
+  * [CORS](#cross-origin-resource-sharing)
+
 * [Controller](#controller)
   * [How to write a controller?](#how-to-write-a-controller)
   * [How to use service in controller?](#how-to-use-service-in-controller)
@@ -16,6 +24,124 @@
   * [How to use service?](#how-to-use-service)
   * [How to inject another service?](#how-to-inject-another-service)
   * [How to init service?](#how-to-init-service)
+
+## Build in feature
+
+### Proxy
+
+This feature provide you proxy request to another host or path, support http/Websocket
+
+here is an example proxy request `/proxy` to `http://127.0.0.1:3000`
+
+```
+localhost:3000/proxy > http://127.0.0.1:3000
+localhost:3000/proxy/user/axetroy > http://127.0.0.1:3000/user/axetroy
+```
+
+```typescript
+import Application from "@axetroy/kost";
+
+new Application()
+  .start({
+    enabled: {
+      proxy: {
+        mount: "/proxy",
+        options: {
+          target: "http://127.0.0.1:3000",
+          changeOrigin: true,
+          xfwd: true,
+          cookieDomainRewrite: true,
+          proxyTimeout: 1000 * 120,
+          logs: true
+        }
+      }
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
+
+### Static file server
+
+server your static file. base on [koa-static](https://github.com/koajs/static)
+
+```typescript
+import Application from "@axetroy/kost";
+
+new Application()
+  .start({
+    enabled: {
+      static: {
+        mount: "/public",
+        options: {} // https://github.com/koajs/static#options
+      }
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
+
+### Body parser
+
+enable body parser use [koa-bodyparser](https://github.com/koajs/bodyparser)
+
+set `true` to use default config;
+
+```typescript
+import Application from "@axetroy/kost";
+
+new Application()
+  .start({
+    enabled: {
+      bodyParser: true // or you can pass an object, see https://github.com/koajs/bodyparser#options
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
+
+### View engine
+
+You need to make sure `/project/views` directory exist. all view template load from it.
+
+base on [koa-views](https://github.com/queckezz/koa-views)
+
+set `true` to use default config;
+
+```typescript
+import Application from "@axetroy/kost";
+
+new Application()
+  .start({
+    enabled: {
+      view: true // or you can pass an object, see https://github.com/queckezz/koa-views#viewsroot-opts
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
+
+#### Cross-Origin resource sharing
+
+support Cross-Origin resource sharing. base on [koa-cors](https://github.com/evert0n/koa-cors/)
+
+```typescript
+import Application from "@axetroy/kost";
+
+new Application()
+  .start({
+    enabled: {
+      cors: true // or you can pass an object, see https://github.com/evert0n/koa-cors/#options
+    }
+  })
+  .catch(function(err) {
+    console.error(err);
+  });
+```
 
 ## Controller
 

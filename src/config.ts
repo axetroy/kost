@@ -63,7 +63,7 @@ export interface Config$ {
         defer?: boolean;
         gzip?: boolean;
         br?: boolean;
-        setHeaders(res: any, path: string, stats: any): any;
+        setHeaders?(res: any, path: string, stats: any): any;
         extensions?: boolean;
       };
     };
