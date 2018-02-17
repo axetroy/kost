@@ -1,4 +1,4 @@
-import { Controller$ } from "../controller";
+import Controller, { Controller$ } from "../controller";
 import { Middleware$, MiddlewareFactory$ } from "../middleware";
 
 /**
@@ -12,6 +12,9 @@ function request(method: string, path: string | RegExp) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
+    if (target instanceof Controller === false) {
+      throw new Error("The http decorator is only use in Controller class");
+    }
     target.router = target.router || [];
     target.router.push({
       path: path,
