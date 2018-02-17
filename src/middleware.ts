@@ -13,8 +13,8 @@ export interface MiddlewareFactory$ {
 
 export default class Middleware implements Middleware$ {
   public config: any = {};
-  constructor(options) {
-    this.config = options;
+  constructor(options?: any) {
+    this.config = options || {};
   }
   async pipe(ctx, next): Promise<any> {
     next();

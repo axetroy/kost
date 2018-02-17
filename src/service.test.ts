@@ -1,10 +1,7 @@
 import test from "ava";
 import { Inject, Container } from "typedi";
 import * as path from "path";
-import { GET } from "./decorators/http";
 import Service, { ServiceFactory$ } from "./service";
-
-const originCwd = process.cwd();
 
 test("service", async t => {
   let serviceFactory: ServiceFactory$;
