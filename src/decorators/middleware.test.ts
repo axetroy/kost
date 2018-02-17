@@ -32,4 +32,15 @@ test("middleware decorator is only use in controller", async t => {
       options: {}
     }
   ]);
+
+  // if the decorator use in a customer class
+
+  t.throws(function() {
+    class Abc {
+      router = [];
+      middleware = [];
+      @USE("logger")
+      async index(ctx, next) {}
+    }
+  });
 });
