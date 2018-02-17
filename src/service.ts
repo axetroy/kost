@@ -6,6 +6,10 @@ export interface Service$ {
   init(app: Application$): Promise<any>;
 }
 
+export interface ServiceFactory$ {
+  new (): Service$;
+}
+
 export default class Service implements Service$ {
   public level: number = 0; // the level of service
   public enable = true; // default true
