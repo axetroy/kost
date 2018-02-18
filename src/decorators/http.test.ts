@@ -1,7 +1,7 @@
 import test from "ava";
 
 import * as path from "path";
-import { GET, POST, PUT, DELETE, HEAD, PATCH, ALL } from "./http";
+import { GET, POST, PUT, DELETE, HEAD, PATCH, OPTIONS, ALL } from "./http";
 import Controller, { ControllerFactory$ } from "../controller";
 
 const originCwd = process.cwd();
@@ -42,6 +42,7 @@ test("http decorator in customer controller should throw an error", async t => {
       @HEAD("/index")
       @PATCH("/index")
       @ALL("/index")
+      @OPTIONS("/index")
       async index(ctx, next) {
         ctx.body = "hello kost";
       }

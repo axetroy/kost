@@ -48,6 +48,10 @@ export function PATCH(path: string | RegExp) {
   return request("PATCH", path);
 }
 
+export function OPTIONS(path: string | RegExp) {
+  return request("OPTIONS", path);
+}
+
 export function ALL(path: string | RegExp) {
   return request("ALL", path);
 }
