@@ -215,7 +215,7 @@ class Application implements Application$ {
 
     app.use(router.routes()).use(router.allowedMethods());
 
-    return app.listen(3000);
+    return app.listen(startOptions.port || process.env.PORT || 3000);
   }
   use(middlewareName: string, options = {}) {
     const app = this.app;

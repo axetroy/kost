@@ -3,6 +3,7 @@ import Application from "../index";
 new Application()
   .use("logger")
   .start({
+    port: 5000,
     enabled: {
       cors: true,
       static: true,

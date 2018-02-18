@@ -65,6 +65,7 @@ export interface StaticFileServerConfig$ {
 }
 
 export interface Config$ {
+  port?: number;
   enabled?: {
     static?: boolean | StaticFileServerConfig$;
     proxy?: {
