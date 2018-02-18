@@ -26,6 +26,10 @@ export interface Application$ {
 
 class Application implements Application$ {
   private app = new Koa();
+  /**
+   * start the server
+   * @param startOptions
+   */
   async start(startOptions: Config$ = {}) {
     const cwd = process.cwd();
     const configDir = path.join(cwd, "configs");
@@ -217,6 +221,11 @@ class Application implements Application$ {
 
     return app.listen(startOptions.port || process.env.PORT || 3000);
   }
+  /**
+   * load middleware
+   * @param middlewareName middleware name in /project/middlewares/:name or a npm package name
+   * @param options
+   */
   use(middlewareName: string, options = {}) {
     const app = this.app;
     const MiddlewareFactory = resolveMiddleware(middlewareName);
