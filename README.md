@@ -10,10 +10,6 @@
 [![npm version](https://badge.fury.io/js/%40axetroy%2Fkost.svg)](https://badge.fury.io/js/%40axetroy%2Fkost)
 ![Size](https://github-size-badge.herokuapp.com/axetroy/kost.svg)
 
-
-
-In development...
-
 kost is a web framework write in Typescript.
 
 It base on Koa@2 and koa-router.
@@ -35,6 +31,10 @@ It base on Koa@2 and koa-router.
 * [x] View engine
 * [x] Cross-Origin Resource Sharing
 * [ ] Cron task
+
+### Architecture
+
+![kost](https://raw.githubusercontent.com/axetroy/kost/master/kost.png)
 
 ### Quickly start
 
