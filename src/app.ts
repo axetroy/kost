@@ -8,7 +8,11 @@ import * as bodyParser from "koa-bodyparser";
 import * as yaml from "js-yaml";
 import { Container } from "typedi";
 
-import Controller, { Controller$ } from "./controller";
+import Controller, {
+  Controller$,
+  Router$,
+  Middleware$ as ControllerMiddleware$
+} from "./controller";
 import Service, { Service$ } from "./service";
 import Middleware, { Middleware$, resolveMiddleware } from "./middleware";
 import {
@@ -19,6 +23,7 @@ import {
   StaticFileServerConfig$
 } from "./config";
 import Context from "./context";
+import { ROUTER, MIDDLEWARE } from "./const";
 
 export interface Application$ {
   start(config: Config$): Promise<any>;
@@ -196,14 +201,16 @@ class Application implements Application$ {
 
     // resolve controller
     for (let controller of controllers) {
-      for (let i = 0; i < controller.router.length; i++) {
-        const route = controller.router[i];
+      
+      const routers: Router$[] = controller[ROUTER];
+      for (let i = 0; i < routers.length; i++) {
+        const route: Router$ = routers[i];
         const handler = controller[route.handler];
 
         // get the middleware for this route
-        const middlewares = (controller.middleware || [])
-          .filter(v => v.handler === route.handler)
-          .map(m => {
+        const middlewares = (controller[MIDDLEWARE] || [])
+          .filter((m: ControllerMiddleware$) => m.handler === route.handler)
+          .map((m: ControllerMiddleware$) => {
             const middleware = new m.factory();
             middleware.config = m.options;
             return middleware;

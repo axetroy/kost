@@ -1,5 +1,6 @@
-import Controller, { Controller$ } from "../controller";
+import Controller, { Controller$, Router$ } from "../controller";
 import { Middleware$, MiddlewareFactory$ } from "../middleware";
+import { ROUTER } from "../const";
 
 /**
  * get controller request
@@ -15,12 +16,13 @@ function request(method: string, path: string | RegExp) {
     if (target instanceof Controller === false) {
       throw new Error("The http decorator is only use in Controller class");
     }
-    target.router = target.router || [];
-    target.router.push({
+    const routers: Router$[] = target[ROUTER] || [];
+    routers.push({
       path: path,
       method: method.toLocaleLowerCase(),
       handler: propertyKey
     });
+    target[ROUTER] = routers;
   };
 }
 

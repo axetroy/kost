@@ -3,6 +3,7 @@ import test from "ava";
 import * as path from "path";
 import { GET } from "./decorators/http";
 import Controller, { ControllerFactory$ } from "./controller";
+import { ROUTER } from "./const";
 
 const originCwd = process.cwd();
 
@@ -20,8 +21,8 @@ test("http decorator", async t => {
 
   const ctrl = new Factory();
 
-  t.deepEqual(ctrl.router.length, 1);
-  t.deepEqual(ctrl.router, [
+  t.deepEqual(ctrl[ROUTER].length, 1);
+  t.deepEqual(ctrl[ROUTER], [
     {
       path: "/index",
       method: "get",

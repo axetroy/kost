@@ -4,6 +4,7 @@ import * as path from "path";
 import { USE } from "./middleware";
 import { resolveMiddleware } from "../middleware";
 import Controller, { ControllerFactory$ } from "../controller";
+import { MIDDLEWARE } from "../const";
 
 const originCwd = process.cwd();
 
@@ -24,8 +25,8 @@ test("middleware decorator is only use in controller", async t => {
   });
 
   const ctrl = new Factory();
-  t.deepEqual(ctrl.middleware.length, 1);
-  t.deepEqual(ctrl.middleware, [
+  t.deepEqual(ctrl[MIDDLEWARE].length, 1);
+  t.deepEqual(ctrl[MIDDLEWARE], [
     {
       handler: "index",
       factory: LoggerMiddleware,

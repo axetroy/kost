@@ -1,13 +1,14 @@
 import { Application$ } from "./app";
 import { MiddlewareFactory$ } from "./middleware";
+import { ROUTER, MIDDLEWARE } from "./const";
 
-interface Router$ {
+export interface Router$ {
   method: string;
   path: string | RegExp;
   handler: string;
 }
 
-interface Middleware$ {
+export interface Middleware$ {
   handler: string;
   factory: MiddlewareFactory$;
   options?: any;
@@ -17,12 +18,11 @@ export interface ControllerFactory$ {
   new (): Controller$;
 }
 
-export interface Controller$ {
-  router: Router$[];
-  middleware: Middleware$[];
-}
+export interface Controller$ {}
 
 export default class Controller implements Controller$ {
-  public router: Router$[];
-  public middleware: Middleware$[];
+  constructor() {
+    this[ROUTER] = this[ROUTER] || [];
+    this[MIDDLEWARE] = this[MIDDLEWARE] || [];
+  }
 }
