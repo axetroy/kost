@@ -1,5 +1,8 @@
 node_modules
 *.log
 .vscode
-build
+build/example
+build/**/*.test.js
+build/**/*.test.d.ts
+build/**/*.map
 .nyc_output
