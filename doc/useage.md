@@ -45,7 +45,7 @@ mkdir hello-world
 cd hello-word
 ```
 
-first, you need install [Typescript](https://github.com/Microsoft/TypeScript) and create an `tsconfig.json` in your project
+first, you need install [Typescript](https://github.com/Microsoft/TypeScript) and create a `tsconfig.json` in your project
 
 ```bash
 touch tsconfig.json
@@ -53,19 +53,32 @@ touch tsconfig.json
 
 and set the config like [this example](https://github.com/axetroy/kost/blob/master/example/tsconfig.json)
 
-then create an `app.ts`
+then create an `app.ts` and `/controllers/home.controller.ts`
 
 ```bash
 touch app.ts
+touch ./controllers/home.controller.ts
 ```
 
 ```typescript
 // app.ts
 import Kost from "@axetroy/kost";
 
-new Kost().start().catch(function(err) {
+new Kost().start({ port: 3000 }).catch(function(err) {
   console.error(err);
 });
+```
+
+```typescript
+// ./controllers/home.controller.ts
+import { Controller, Get } from "@axetroy/kost";
+
+export default class extends Controller {
+  @Get("/")
+  index(ctx, next) {
+    ctx.body = "hello world";
+  }
+}
 ```
 
 then use [ts-node](https://github.com/TypeStrong/ts-node) to start the app.
@@ -73,6 +86,8 @@ then use [ts-node](https://github.com/TypeStrong/ts-node) to start the app.
 ```bash
 ts-node ./app.ts
 ```
+
+Now, open your browser and type `localhost:3000`, it will should hello world
 
 ## Load config
 
