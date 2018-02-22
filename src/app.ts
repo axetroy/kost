@@ -7,6 +7,7 @@ import * as mount from "koa-mount";
 import * as bodyParser from "koa-bodyparser";
 import * as yaml from "js-yaml";
 import { Container } from "typedi";
+import { Server } from "http";
 
 import Controller, {
   Controller$,
@@ -27,7 +28,7 @@ import { ROUTER, MIDDLEWARE } from "./const";
 import { paths } from "./path";
 
 export interface Application$ {
-  start(config: Config$): Promise<any>;
+  start(config: Config$): Promise<Server>;
 }
 
 class Application implements Application$ {

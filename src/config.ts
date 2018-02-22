@@ -1,7 +1,7 @@
 import * as proxyServer from "http-proxy";
 import * as Koa from "koa";
 
-interface ProxyConfig$ extends proxyServer.ServerOptions {
+export interface ProxyConfig$ extends proxyServer.ServerOptions {
   rewrite?(path: string): string;
   cookieDomainRewrite?: boolean;
   logs?: boolean;
@@ -41,7 +41,7 @@ export interface ViewConfig$ {
   engineSource?: any;
 }
 
-type originHandler = (ctx: Koa.Request) => string;
+export type originHandler = (ctx: Koa.Request) => string;
 
 export interface CorsConfig$ {
   origin?: string | boolean | originHandler;
