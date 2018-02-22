@@ -85,7 +85,9 @@ it will load `default.config.yaml` fist
 then load another config depending on your environment
 
 if `process.env.NODE_ENV==='development'` (default), then load `development.config.yaml`
+
 if `process.env.NODE_ENV==='production'` , then load `production.config.yaml`
+
 if `process.env.NODE_ENV==='test'` , then load `test.config.yaml`
 
 two config file will be merger into one object.
