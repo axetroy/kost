@@ -2,6 +2,8 @@
 
 * [Quickly start](#quickly-start)
 
+* [Load config](#load-config)
+
 * [Build in feature](#build-in-feature)
 
   * [Proxy](#proxy)
@@ -11,21 +13,28 @@
   * [CORS](#cross-origin-resource-sharing)
 
 * [Controller](#controller)
+
   * [How to write a controller?](#how-to-write-a-controller)
   * [How to use service in controller?](#how-to-use-service-in-controller)
   * [How to get app context in controller?](#how-to-get-app-context-in-controller)
   * [How to use a middleware in controller?](#how-to-use-a-middleware-in-controller)
+
 * [Middleware](#middleware)
+
   * [How to write a middleware?](#how-to-write-a-middleware)
   * [How to reuse the Koa middleware?](#how-to-reuse-the-koa-middleware)
   * [How to use a middleware for global request?](#how-to-use-a-middleware-for-global-request)
   * [How to use a middleware in controller?](#how-to-use-a-middleware-in-controller)
   * [How to load middleware from npm?](#how-to-load-middleware-from-npm)
+
 * [Service](#service)
+
   * [How to write a service?](#how-to-write-a-service)
   * [How to use service?](#how-to-use-service)
   * [How to inject another service?](#how-to-inject-another-service)
   * [How to init service?](#how-to-init-service)
+
+- [Context](#context)
 
 ## Quickly start
 
@@ -64,6 +73,24 @@ then use [ts-node](https://github.com/TypeStrong/ts-node) to start the app.
 ```bash
 ts-node ./app.ts
 ```
+
+## Load config
+
+Kost let you load config without tear.
+
+Support load YAML config file from `/project/configs`
+
+it will load `default.config.yaml` fist
+
+then load another config depending on your environment
+
+if `process.env.NODE_ENV==='development'` (default), then load `development.config.yaml`
+if `process.env.NODE_ENV==='production'` , then load `production.config.yaml`
+if `process.env.NODE_ENV==='test'` , then load `test.config.yaml`
+
+two config file will be merger into one object.
+
+Your can get config from [Context](#context)
 
 ## Build in feature
 
@@ -504,3 +531,11 @@ class InitUserService extends Service {
 
 export default InitUserService;
 ```
+
+## Context
+
+What's context?
+
+context save some important information, like `start(params)` params, [config](#load-config)
+
+Context is an injectable class, it can be inject into [Controller](#how-to-get-app-context-in-controller), Service, Middleware
