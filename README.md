@@ -10,9 +10,7 @@
 [![npm version](https://badge.fury.io/js/%40axetroy%2Fkost.svg)](https://badge.fury.io/js/%40axetroy%2Fkost)
 ![Size](https://github-size-badge.herokuapp.com/axetroy/kost.svg)
 
-kost is a web framework write in Typescript.
-
-It base on Koa@2 and koa-router.
+kost is a web framework write in Typescript and base on Koa.
 
 **Feature**
 
