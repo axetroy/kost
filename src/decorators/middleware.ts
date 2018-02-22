@@ -16,8 +16,11 @@ export function USE(middlewareName: string, options: any = {}) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    if (target instanceof Controller === false) {
-      throw new Error("@USE() decorator only can use in controller class");
+    if (
+      target instanceof Controller === false ||
+      typeof target[propertyKey] !== "function"
+    ) {
+      throw new Error("@USE() decorator only for controller method");
     }
     const middlewares: ControllerMiddleware$[] = target[MIDDLEWARE] || [];
     middlewares.push({

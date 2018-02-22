@@ -13,8 +13,11 @@ function request(method: string, path: string | RegExp) {
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
-    if (target instanceof Controller === false) {
-      throw new Error("The http decorator is only use in Controller class");
+    if (
+      target instanceof Controller === false ||
+      typeof target[propertyKey] !== "function"
+    ) {
+      throw new Error(`@${method} decorator is only for class method`);
     }
     const routers: Router$[] = target[ROUTER] || [];
     routers.push({
