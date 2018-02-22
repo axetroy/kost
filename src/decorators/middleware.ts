@@ -5,11 +5,11 @@ import Controller, {
 } from "../controller";
 import { MIDDLEWARE } from "../const";
 /**
- * decorator of middleware
+ * decorator of controller to inject the middleware
  * @param middlewareName
  * @param options
  */
-export function USE(middlewareName: string, options: any = {}) {
+export function Use(middlewareName: string, options: any = {}) {
   const MiddlewareFactory = resolveMiddleware(middlewareName);
   return function(
     target: Controller$,

@@ -1,4 +1,4 @@
-import { Controller, Inject, GET, USE, Context } from "../../index";
+import { Controller, Inject, Get, Use, Context } from "../../index";
 
 import UserService from "../services/user.service";
 
@@ -6,20 +6,20 @@ class UserController extends Controller {
   @Inject() user: UserService;
   @Inject() context: Context;
 
-  @GET("/")
+  @Get("/")
   index(ctx, next) {
     ctx.body = "hello world";
   }
-  @GET("/hello")
+  @Get("/hello")
   async say(ctx, next) {
     await ctx.render("index.html");
   }
-  @GET("/whoami")
+  @Get("/whoami")
   async name(ctx, next) {
     ctx.body = await this.user.getUser();
   }
-  @GET(/^\/user\/\w/gi)
-  @USE("logger")
+  @Get(/^\/user\/\w/gi)
+  @Use("logger")
   async info(ctx, next) {
     console.log(this.context);
     ctx.body = "regular expression match";

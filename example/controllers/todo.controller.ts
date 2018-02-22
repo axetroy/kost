@@ -1,11 +1,11 @@
-import { Controller, Inject, GET, POST } from "../../index";
+import { Controller, Inject, Get, Post } from "../../index";
 
 import UserService from "../services/user.service";
 
 export default class TodoController extends Controller {
   @Inject() user: UserService;
 
-  @GET("/todo/list")
+  @Get("/todo/list")
   index(ctx, next) {
     ctx.body = [
       {
@@ -18,7 +18,7 @@ export default class TodoController extends Controller {
       }
     ];
   }
-  @POST("/todo/create")
+  @Post("/todo/create")
   async name(ctx, next) {
     ctx.body = "create a new todo task";
   }

@@ -3,7 +3,7 @@ import { Middleware$, MiddlewareFactory$ } from "../middleware";
 import { ROUTER } from "../const";
 
 /**
- * get controller request
+ * decorator for controller
  * @param method
  * @param path
  */
@@ -29,34 +29,34 @@ function request(method: string, path: string | RegExp) {
   };
 }
 
-export function GET(path: string | RegExp) {
+export function Get(path: string | RegExp) {
   return request("GET", path);
 }
 
-export function POST(path: string | RegExp) {
+export function Post(path: string | RegExp) {
   return request("POST", path);
 }
 
-export function PUT(path: string | RegExp) {
+export function Put(path: string | RegExp) {
   return request("PUT", path);
 }
 
-export function DELETE(path: string | RegExp) {
+export function Delete(path: string | RegExp) {
   return request("DELETE", path);
 }
 
-export function HEAD(path: string | RegExp) {
+export function Head(path: string | RegExp) {
   return request("HEAD", path);
 }
 
-export function PATCH(path: string | RegExp) {
+export function Patch(path: string | RegExp) {
   return request("PATCH", path);
 }
 
-export function OPTIONS(path: string | RegExp) {
+export function Options(path: string | RegExp) {
   return request("OPTIONS", path);
 }
 
-export function ALL(path: string | RegExp) {
+export function All(path: string | RegExp) {
   return request("ALL", path);
 }

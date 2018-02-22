@@ -1,7 +1,7 @@
 import test from "ava";
 
 import * as path from "path";
-import { USE } from "./middleware";
+import { Use } from "./middleware";
 import { resolveMiddleware } from "../middleware";
 import Controller, { ControllerFactory$ } from "../controller";
 import { MIDDLEWARE } from "../const";
@@ -18,7 +18,7 @@ test("middleware decorator is only use in controller", async t => {
   let Factory: ControllerFactory$;
   t.notThrows(function() {
     class HomeController extends Controller {
-      @USE("logger")
+      @Use("logger")
       async index(ctx, next) {
         ctx.body = "hello kost";
       }
@@ -42,7 +42,7 @@ test("middleware decorator is only use in controller", async t => {
     class Abc {
       router = [];
       middleware = [];
-      @USE("logger")
+      @Use("logger")
       async index(ctx, next) {}
     }
   });
