@@ -1,6 +1,7 @@
 import * as path from "path";
 import { Application$ } from "./app";
 import * as Koa from "koa";
+import { paths } from "./path";
 
 export interface Middleware$ {
   config: any;
@@ -26,17 +27,18 @@ export default class Middleware implements Middleware$ {
  * @param middlewareName
  * @param cwd
  */
-export function resolveMiddleware(
-  middlewareName: string,
-  cwd: string = process.cwd()
-): MiddlewareFactory$ {
+export function resolveMiddleware(middlewareName: string): MiddlewareFactory$ {
   let MiddlewareFactory: MiddlewareFactory$;
   let moduleOutput: any;
   try {
-    const localMiddlewarePath = path.join(cwd, "middlewares", middlewareName);
+    const localMiddlewarePath = path.join(
+      paths.middleware,
+      middlewareName + ".middleware"
+    );
     // require from local
     moduleOutput = require(localMiddlewarePath);
   } catch (err) {
+    // if not found in local middleware dir
     // require from node_modules
     try {
       moduleOutput = require(middlewareName);

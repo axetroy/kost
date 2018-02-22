@@ -1,6 +1,6 @@
 import { Controller, Inject, GET, USE, Context } from "../../index";
 
-import UserService from "../services/user";
+import UserService from "../services/user.service";
 
 class UserController extends Controller {
   @Inject() user: UserService;

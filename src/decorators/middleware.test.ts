@@ -5,13 +5,15 @@ import { USE } from "./middleware";
 import { resolveMiddleware } from "../middleware";
 import Controller, { ControllerFactory$ } from "../controller";
 import { MIDDLEWARE } from "../const";
+import { paths } from "../path";
 
 const originCwd = process.cwd();
 
 test("middleware decorator is only use in controller", async t => {
   // 进入到example目录作为测试
   const cwd = path.join(__dirname, "..", "..", "example");
-  const LoggerMiddleware = resolveMiddleware("logger", cwd);
+  paths.middleware = path.join(cwd, "middlewares"); // reset the middleware
+  const LoggerMiddleware = resolveMiddleware("logger");
   process.chdir(cwd);
   let Factory: ControllerFactory$;
   t.notThrows(function() {

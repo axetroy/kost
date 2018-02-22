@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import * as fs from "fs";
+import * as fs from "fs-extra";
 import * as path from "path";
 import * as Koa from "koa";
 import * as Router from "koa-router";
@@ -24,6 +24,7 @@ import {
 } from "./config";
 import Context from "./context";
 import { ROUTER, MIDDLEWARE } from "./const";
+import { paths } from "./path";
 
 export interface Application$ {
   start(config: Config$): Promise<any>;
@@ -36,31 +37,33 @@ class Application implements Application$ {
    * @param startOptions
    */
   async start(startOptions: Config$ = {}) {
-    const cwd = process.cwd();
-    const configDir = path.join(cwd, "configs");
-    const controllerDir = path.join(cwd, "controllers");
-    const serviceDir = path.join(cwd, "services");
-    const staticDir = path.join(cwd, "static");
-    const controllerFiles = fs.readdirSync(controllerDir);
-    const serviceFiles = fs.readdirSync(serviceDir);
+    const defaultConfigPath = path.join(paths.config, "default.config.yaml");
+    const envConfigPath = path.join(
+      paths.config,
+      process.env.NODE_ENV + ".config.yaml"
+    );
+
+    const controllerFiles = (await fs.readdir(paths.controller)).filter(file =>
+      /\.controller\.t|js$/.test(file)
+    );
+    const serviceFiles = (await fs.readdir(paths.service)).filter(file =>
+      /\.service.t|js$/.test(file)
+    );
 
     const app = this.app;
 
     // create global context
     const context = Container.get(Context);
 
-    // load default config
-    const defaultConfig = yaml.safeLoad(
-      fs.readFileSync(path.join(configDir, "default.yaml"), "utf8")
-    );
+    // load default config if it exist
+    const defaultConfig = (await fs.pathExists(defaultConfigPath))
+      ? yaml.safeLoad(await fs.readFile(defaultConfigPath, "utf8"))
+      : {};
 
-    // load env config
-    const envConfig = yaml.safeLoad(
-      fs.readFileSync(
-        path.join(configDir, process.env.NODE_ENV + ".yaml"),
-        "utf8"
-      )
-    );
+    // load env config if it exist
+    const envConfig = (await fs.pathExists(envConfigPath))
+      ? yaml.safeLoad(fs.readFileSync(envConfigPath, "utf8"))
+      : {};
 
     const config: any = Object.assign(defaultConfig, envConfig);
 
@@ -101,7 +104,7 @@ class Application implements Application$ {
         app.use(
           mount(
             StaticFileServerConfig.mount,
-            FileServer(staticDir, StaticFileServerConfig)
+            FileServer(paths.static, StaticFileServerConfig)
           )
         );
       }
@@ -127,7 +130,7 @@ class Application implements Application$ {
           viewConfig = view;
         }
         const views = require("koa-views");
-        app.use(views(path.join(cwd, "views"), viewConfig));
+        app.use(views(paths.view, viewConfig));
       }
 
       // enable cors
@@ -143,11 +146,8 @@ class Application implements Application$ {
 
     // init service
     const services: Service$[] = serviceFiles
-      .filter(
-        serviceFile => [".js", ".ts"].indexOf(path.extname(serviceFile)) >= 0
-      )
       .map(serviceFile => {
-        const filePath: string = path.join(serviceDir, serviceFile);
+        const filePath: string = path.join(paths.service, serviceFile);
         let ServiceFactory = require(filePath);
         ServiceFactory = ServiceFactory.default
           ? ServiceFactory.default
@@ -172,36 +172,25 @@ class Application implements Application$ {
     // load controller
     while (controllerFiles.length) {
       const controllerFile = controllerFiles.shift();
+      const filePath: string = path.join(paths.controller, controllerFile);
+      let YourController = require(filePath);
+      YourController = YourController.default
+        ? YourController.default
+        : YourController;
 
-      if (controllerFile) {
-        switch (path.extname(controllerFile)) {
-          case ".js":
-          case ".ts":
-            const filePath: string = path.join(controllerDir, controllerFile);
-            let YourController = require(filePath);
-            YourController = YourController.default
-              ? YourController.default
-              : YourController;
+      const ctrl: Controller$ = Container.get(YourController);
 
-            const ctrl: Controller$ = Container.get(YourController);
-
-            if (ctrl instanceof Controller === false) {
-              throw new Error(`The file ${filePath} is not a controller file.`);
-            }
-
-            controllers.push(ctrl);
-            break;
-          default:
-            break;
-        }
+      if (ctrl instanceof Controller === false) {
+        throw new Error(`The file ${filePath} is not a controller file.`);
       }
+
+      controllers.push(ctrl);
     }
 
     const router = new Router();
 
     // resolve controller
     for (let controller of controllers) {
-      
       const routers: Router$[] = controller[ROUTER];
       for (let i = 0; i < routers.length; i++) {
         const route: Router$ = routers[i];

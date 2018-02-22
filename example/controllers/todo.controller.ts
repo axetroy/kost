@@ -1,6 +1,6 @@
 import { Controller, Inject, GET, POST } from "../../index";
 
-import UserService from "../services/user";
+import UserService from "../services/user.service";
 
 export default class TodoController extends Controller {
   @Inject() user: UserService;
