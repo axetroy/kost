@@ -1,6 +1,6 @@
 import * as path from "path";
 
-interface Path$ {
+export interface Path$ {
   cwd: string;
   controller: string;
   config: string;
