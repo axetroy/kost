@@ -46,21 +46,21 @@ npm install @axetroy/kost --save
 Here is the project
 
 ```
-.
+example/
 ├── app.ts
 ├── configs
-│   ├── default.yaml
-│   ├── development.yaml
-│   ├── production.yaml
-│   └── test.yaml
+│   ├── default.config.yaml
+│   ├── development.config.yaml
+│   ├── production.config.yaml
+│   └── test.config.yaml
 ├── controllers
-│   ├── todo.ts
-│   └── user.ts
+│   ├── todo.controller.ts
+│   └── user.controller.ts
 ├── middlewares
-│   └── logger.ts
+│   └── logger.middleware.ts
 ├── services
-│   ├── orm.ts
-│   └── user.ts
+│   ├── orm.service.ts
+│   └── user.service.ts
 ├── static
 │   └── test.text
 ├── tsconfig.json
