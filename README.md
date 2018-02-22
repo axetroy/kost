@@ -30,6 +30,7 @@ It base on Koa@2 and koa-router.
 * [x] Body parser
 * [x] View engine
 * [x] Cross-Origin Resource Sharing
+* [ ] Exception error handler for controller/middleware
 * [ ] Cron task
 
 ### Architecture
