@@ -205,6 +205,10 @@ class Application implements Application$ {
             return middleware;
           });
 
+        if (process.env.NODE_ENV === "development") {
+          console.log(`[${route.method.toUpperCase()}] ${route.path}`);
+        }
+
         router[route.method](
           route.path,
           ...middlewares.map(m => m.pipe.bind(m)), // middleware
