@@ -36,7 +36,7 @@ mkdir hello-world
 cd hello-word
 ```
 
-first, you need install [Typescript]() and create an `tsconfig.json` in your project
+first, you need install [Typescript](https://github.com/Microsoft/TypeScript) and create an `tsconfig.json` in your project
 
 ```bash
 touch tsconfig.json
@@ -59,7 +59,7 @@ new Kost().start().catch(function(err) {
 });
 ```
 
-then use `ts-node` to start the app.
+then use [ts-node](https://github.com/TypeStrong/ts-node) to start the app.
 
 ```bash
 ts-node ./app.ts
