@@ -90,9 +90,9 @@ if `process.env.NODE_ENV==='production'` , then load `production.config.yaml`
 
 if `process.env.NODE_ENV==='test'` , then load `test.config.yaml`
 
-two config file will be merger into one object.
+Two config file will be merger into one object.
 
-Your can get config from [Context](#context)
+Your can get config object from [Context](#context)
 
 ## Build in feature
 
