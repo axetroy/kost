@@ -1,5 +1,7 @@
 # Document
 
+* [Quickly start](#quickly-start)
+
 * [Build in feature](#build-in-feature)
 
   * [Proxy](#proxy)
@@ -24,6 +26,44 @@
   * [How to use service?](#how-to-use-service)
   * [How to inject another service?](#how-to-inject-another-service)
   * [How to init service?](#how-to-init-service)
+
+## Quickly start
+
+Here I show you how to create a simple hello world app.
+
+```bash
+mkdir hello-world
+cd hello-word
+```
+
+first, you need install [Typescript]() and create an `tsconfig.json` in your project
+
+```bash
+touch tsconfig.json
+```
+
+and set the config like [this example](https://github.com/axetroy/kost/blob/master/example/tsconfig.json)
+
+then create an `app.ts`
+
+```bash
+touch app.ts
+```
+
+```typescript
+// app.ts
+import Kost from "@axetroy/kost";
+
+new Kost().start().catch(function(err) {
+  console.error(err);
+});
+```
+
+then use `ts-node` to start the app.
+
+```bash
+ts-node ./app.ts
+```
 
 ## Build in feature
 
