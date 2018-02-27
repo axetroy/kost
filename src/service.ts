@@ -25,6 +25,10 @@ export default class Service implements Service$ {
   async init(): Promise<any> {}
 }
 
+/**
+ * check is a valid service or not
+ * @param s
+ */
 export function isValidService(s: any): boolean {
   return s instanceof Service;
 }
@@ -46,12 +50,12 @@ export async function loadService(): Promise<void> {
         ? ServiceFactory.default
         : Service;
       const service = <Service$>Container.get(ServiceFactory);
-      if (service instanceof Service === false) {
+      if (!isValidService(service)) {
         throw new Error(`The file ${filePath} is not a service file.`);
       }
       return service;
     })
-    .sort((a: Service$) => -a.level);
+    .sort((a: Service$) => -a.level); // sort by service's level
 
   while (services.length) {
     const service = services.shift();

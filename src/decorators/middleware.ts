@@ -1,8 +1,5 @@
 import { resolveMiddleware } from "../middleware";
-import Controller, {
-  Controller$,
-  Middleware$ as ControllerMiddleware$
-} from "../controller";
+import Controller, { Controller$, ControllerMiddleware$ } from "../controller";
 import { MIDDLEWARE } from "../const";
 /**
  * decorator of controller to inject the middleware
@@ -22,12 +19,13 @@ export function Use(middlewareName: string, options: any = {}) {
     ) {
       throw new Error("@USE() decorator only for controller method");
     }
-    const middlewares: ControllerMiddleware$[] = target[MIDDLEWARE] || [];
-    middlewares.push({
+    const controllerMiddleware: ControllerMiddleware$[] =
+      target[MIDDLEWARE] || [];
+    controllerMiddleware.push({
       handler: propertyKey,
       factory: MiddlewareFactory,
       options
     });
-    target[MIDDLEWARE] = middlewares;
+    target[MIDDLEWARE] = controllerMiddleware;
   };
 }

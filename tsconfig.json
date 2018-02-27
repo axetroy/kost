@@ -41,7 +41,8 @@
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     "rootDirs": [
       "example",
-      "src"
+      "src",
+      "__test__"
     ] /* List of root folders whose combined content represents the structure of the project at runtime. */,
     "typeRoots": ["node_modules/@types"],
     /* List of folders to include type definitions from. */
@@ -59,6 +60,6 @@
     "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
     "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */
   },
-  "include": ["src/**/*", "example/**/*", "test"],
+  "include": ["src/**/*", "example/**/*", "test", "__test__"],
   "exclude": ["node_modules"]
 }
