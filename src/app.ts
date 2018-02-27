@@ -1,20 +1,12 @@
 import "reflect-metadata";
-import * as fs from "fs-extra";
-import * as path from "path";
 import * as Koa from "koa";
-import * as Router from "koa-router";
 import * as mount from "koa-mount";
 import * as bodyParser from "koa-bodyparser";
-import * as yaml from "js-yaml";
 import { Container } from "typedi";
 import { Server } from "http";
 
-import Controller, {
-  Controller$,
-  Router$,
-  Middleware$ as ControllerMiddleware$
-} from "./controller";
-import Service, { Service$ } from "./service";
+import { loadController } from "./controller";
+import { loadService } from "./service";
 import Middleware, {
   Middleware$,
   resolveMiddleware,
@@ -29,7 +21,6 @@ import {
   loadConfig
 } from "./config";
 import Context from "./context";
-import { ROUTER, MIDDLEWARE } from "./const";
 import { paths } from "./path";
 
 export interface Application$ {
@@ -43,18 +34,12 @@ class Application implements Application$ {
    * @param startOptions
    */
   async start(startOptions: Config$ = {}) {
-    const controllerFiles = (await fs.readdir(paths.controller)).filter(file =>
-      /\.controller\.t|js$/.test(file)
-    );
-    const serviceFiles = (await fs.readdir(paths.service)).filter(file =>
-      /\.service.t|js$/.test(file)
-    );
-
     const app = this.app;
 
     // create global context
     const context = Container.get(Context);
 
+    // load config
     const config: any = await loadConfig();
 
     // set context;
@@ -135,83 +120,10 @@ class Application implements Application$ {
     }
 
     // init service
-    const services: Service$[] = serviceFiles
-      .map(serviceFile => {
-        const filePath: string = path.join(paths.service, serviceFile);
-        let ServiceFactory = require(filePath);
-        ServiceFactory = ServiceFactory.default
-          ? ServiceFactory.default
-          : Service;
-        const service = <Service$>Container.get(ServiceFactory);
-        if (service instanceof Service === false) {
-          throw new Error(`The file ${filePath} is not a service file.`);
-        }
-        return service;
-      })
-      .sort((a: Service$) => -a.level);
+    await loadService();
 
-    while (services.length) {
-      const service = services.shift();
-      if (service) {
-        await service.init(this);
-      }
-    }
-
-    const controllers: Controller$[] = [];
-
-    // load controller
-    while (controllerFiles.length) {
-      const controllerFile = controllerFiles.shift();
-      const filePath: string = path.join(paths.controller, controllerFile);
-      let YourController = require(filePath);
-      YourController = YourController.default
-        ? YourController.default
-        : YourController;
-
-      const ctrl: Controller$ = Container.get(YourController);
-
-      if (ctrl instanceof Controller === false) {
-        throw new Error(`The file ${filePath} is not a controller file.`);
-      }
-
-      controllers.push(ctrl);
-    }
-
-    const router = new Router();
-
-    // resolve controller
-    for (let controller of controllers) {
-      const routers: Router$[] = controller[ROUTER];
-      for (let i = 0; i < routers.length; i++) {
-        const route: Router$ = routers[i];
-        const handler = controller[route.handler];
-
-        // get the middleware for this route
-        const middlewares = (controller[MIDDLEWARE] || [])
-          .filter((m: ControllerMiddleware$) => m.handler === route.handler)
-          .map((m: ControllerMiddleware$) => {
-            const middleware = new m.factory();
-            middleware.config = m.options;
-            return middleware;
-          });
-
-        if (process.env.NODE_ENV === "development") {
-          console.log(`[${route.method.toUpperCase()}] ${route.path}`);
-        }
-
-        middlewares.array.forEach(m => {
-          if (!isValidMiddleware(m)) {
-            throw new Error(`Invalid middleware`);
-          }
-        });
-
-        router[route.method](
-          route.path,
-          ...middlewares.map(m => m.pipe.bind(m)), // middleware
-          async (ctx, next) => handler.call(controller, ctx, next)
-        );
-      }
-    }
+    // load controller and generate router
+    const router = await loadController();
 
     app.use(router.routes()).use(router.allowedMethods());
 
