@@ -1,5 +1,6 @@
 import { Middleware } from "./../../index";
-export default class extends Middleware {
+
+export default class LoggerMiddleware extends Middleware {
   async pipe(ctx, next) {
     const before = new Date().getTime();
     await next();

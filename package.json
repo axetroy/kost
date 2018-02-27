@@ -37,7 +37,7 @@
     "typedi": "^0.6.1"
   },
   "scripts": {
-    "test": "tsc -p ./ && nyc ava ./build/**/**/*.test.js",
+    "test": "tsc -p ./ && nyc ava ./build/**/*.test.js",
     "build": "tsc -p ./ -d"
   },
   "author": "Axetroy",

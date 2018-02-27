@@ -10,16 +10,23 @@ export interface Path$ {
   view: string;
 }
 
-const cwd = process.cwd();
+let paths: Path$;
 
-const paths: Path$ = {
-  cwd,
-  controller: path.join(cwd, "controllers"),
-  config: path.join(cwd, "configs"),
-  middleware: path.join(cwd, "middlewares"),
-  service: path.join(cwd, "services"),
-  static: path.join(cwd, "static"),
-  view: path.join(cwd, "views")
-};
+/**
+ * set current working dir
+ * @param cwd
+ */
+export function setCurrentWorkingDir(cwd: string): void {
+  paths = paths || <any>{};
+  paths.cwd = cwd;
+  paths.config = path.join(cwd, "configs");
+  paths.controller = path.join(cwd, "controllers");
+  paths.middleware = path.join(cwd, "middlewares");
+  paths.service = path.join(cwd, "services");
+  paths.static = path.join(cwd, "static");
+  paths.view = path.join(cwd, "views");
+}
+
+setCurrentWorkingDir(process.cwd());
 
 export { paths };

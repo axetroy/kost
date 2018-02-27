@@ -17,6 +17,11 @@ export default class Middleware implements Middleware$ {
   constructor(options?: any) {
     this.config = options || {};
   }
+  /**
+   * the pipe function, same with koa middleware
+   * @param ctx
+   * @param next
+   */
   async pipe(ctx, next): Promise<any> {
     next();
   }
@@ -52,4 +57,14 @@ export function resolveMiddleware(middlewareName: string): MiddlewareFactory$ {
     : moduleOutput;
 
   return MiddlewareFactory;
+}
+
+const defaultMiddleware = new Middleware();
+
+/**
+ * check the object is a valid middleware or not
+ * @param m
+ */
+export function isValidMiddleware(m: any): boolean {
+  return m instanceof Middleware && m.pipe !== defaultMiddleware.pipe;
 }

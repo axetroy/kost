@@ -1,3 +1,4 @@
+import "reflect-metadata";
 import test from "ava";
 import { Inject, Container } from "typedi";
 import * as path from "path";

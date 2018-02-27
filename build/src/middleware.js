@@ -33,4 +33,9 @@ function resolveMiddleware(middlewareName) {
     return MiddlewareFactory;
 }
 exports.resolveMiddleware = resolveMiddleware;
+const defaultMiddleware = new Middleware();
+function isValidMiddleware(m) {
+    return m instanceof Middleware && m.pipe !== defaultMiddleware.pipe;
+}
+exports.isValidMiddleware = isValidMiddleware;
 //# sourceMappingURL=middleware.js.map

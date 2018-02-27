@@ -15,13 +15,18 @@ import Controller, {
   Middleware$ as ControllerMiddleware$
 } from "./controller";
 import Service, { Service$ } from "./service";
-import Middleware, { Middleware$, resolveMiddleware } from "./middleware";
+import Middleware, {
+  Middleware$,
+  resolveMiddleware,
+  isValidMiddleware
+} from "./middleware";
 import {
   Config$,
   BodyParserConfig$,
   ViewConfig$,
   CorsConfig$,
-  StaticFileServerConfig$
+  StaticFileServerConfig$,
+  loadConfig
 } from "./config";
 import Context from "./context";
 import { ROUTER, MIDDLEWARE } from "./const";
@@ -38,12 +43,6 @@ class Application implements Application$ {
    * @param startOptions
    */
   async start(startOptions: Config$ = {}) {
-    const defaultConfigPath = path.join(paths.config, "default.config.yaml");
-    const envConfigPath = path.join(
-      paths.config,
-      process.env.NODE_ENV + ".config.yaml"
-    );
-
     const controllerFiles = (await fs.readdir(paths.controller)).filter(file =>
       /\.controller\.t|js$/.test(file)
     );
@@ -56,17 +55,7 @@ class Application implements Application$ {
     // create global context
     const context = Container.get(Context);
 
-    // load default config if it exist
-    const defaultConfig = (await fs.pathExists(defaultConfigPath))
-      ? yaml.safeLoad(await fs.readFile(defaultConfigPath, "utf8"))
-      : {};
-
-    // load env config if it exist
-    const envConfig = (await fs.pathExists(envConfigPath))
-      ? yaml.safeLoad(fs.readFileSync(envConfigPath, "utf8"))
-      : {};
-
-    const config: any = Object.assign(defaultConfig, envConfig);
+    const config: any = await loadConfig();
 
     // set context;
     context.config = config;
@@ -210,6 +199,12 @@ class Application implements Application$ {
           console.log(`[${route.method.toUpperCase()}] ${route.path}`);
         }
 
+        middlewares.array.forEach(m => {
+          if (!isValidMiddleware(m)) {
+            throw new Error(`Invalid middleware`);
+          }
+        });
+
         router[route.method](
           route.path,
           ...middlewares.map(m => m.pipe.bind(m)), // middleware
@@ -233,8 +228,7 @@ class Application implements Application$ {
 
     const middleware: Middleware$ = new MiddlewareFactory();
 
-    // if middleware is not inherit from Middleware
-    if (middleware instanceof Middleware === false) {
+    if (!isValidMiddleware(middleware)) {
       throw new Error(`Invalid middleware "${middlewareName}"`);
     }
 

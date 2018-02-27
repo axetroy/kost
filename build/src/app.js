@@ -6,11 +6,11 @@ const path = require("path");
 const Koa = require("koa");
 const Router = require("koa-router");
 const mount = require("koa-mount");
-const yaml = require("js-yaml");
 const typedi_1 = require("typedi");
 const controller_1 = require("./controller");
 const service_1 = require("./service");
 const middleware_1 = require("./middleware");
+const config_1 = require("./config");
 const context_1 = require("./context");
 const const_1 = require("./const");
 const path_1 = require("./path");
@@ -19,19 +19,11 @@ class Application {
         this.app = new Koa();
     }
     async start(startOptions = {}) {
-        const defaultConfigPath = path.join(path_1.paths.config, "default.config.yaml");
-        const envConfigPath = path.join(path_1.paths.config, process.env.NODE_ENV + ".config.yaml");
         const controllerFiles = (await fs.readdir(path_1.paths.controller)).filter(file => /\.controller\.t|js$/.test(file));
         const serviceFiles = (await fs.readdir(path_1.paths.service)).filter(file => /\.service.t|js$/.test(file));
         const app = this.app;
         const context = typedi_1.Container.get(context_1.default);
-        const defaultConfig = (await fs.pathExists(defaultConfigPath))
-            ? yaml.safeLoad(await fs.readFile(defaultConfigPath, "utf8"))
-            : {};
-        const envConfig = (await fs.pathExists(envConfigPath))
-            ? yaml.safeLoad(fs.readFileSync(envConfigPath, "utf8"))
-            : {};
-        const config = Object.assign(defaultConfig, envConfig);
+        const config = await config_1.loadConfig();
         context.config = config;
         context.params = startOptions;
         if (startOptions.enabled) {
@@ -129,6 +121,11 @@ class Application {
                 if (process.env.NODE_ENV === "development") {
                     console.log(`[${route.method.toUpperCase()}] ${route.path}`);
                 }
+                middlewares.array.forEach(m => {
+                    if (!middleware_1.isValidMiddleware(m)) {
+                        throw new Error(`Invalid middleware`);
+                    }
+                });
                 router[route.method](route.path, ...middlewares.map(m => m.pipe.bind(m)), async (ctx, next) => handler.call(controller, ctx, next));
             }
         }
@@ -139,7 +136,7 @@ class Application {
         const app = this.app;
         const MiddlewareFactory = middleware_1.resolveMiddleware(middlewareName);
         const middleware = new MiddlewareFactory();
-        if (middleware instanceof middleware_1.default === false) {
+        if (!middleware_1.isValidMiddleware(middleware)) {
             throw new Error(`Invalid middleware "${middlewareName}"`);
         }
         middleware.config = options;

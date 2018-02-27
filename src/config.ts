@@ -1,5 +1,9 @@
 import * as proxyServer from "http-proxy";
 import * as Koa from "koa";
+import * as yaml from "js-yaml";
+import * as fs from "fs-extra";
+import * as path from "path";
+import { paths } from "./path";
 
 export interface ProxyConfig$ extends proxyServer.ServerOptions {
   rewrite?(path: string): string;
@@ -76,4 +80,28 @@ export interface Config$ {
     bodyParser?: boolean | BodyParserConfig$;
     view?: boolean | ViewConfig$;
   };
+}
+
+/**
+ * load config
+ */
+export async function loadConfig(): Promise<any> {
+  const defaultConfigPath = path.join(paths.config, "default.config.yaml");
+  const envConfigPath = path.join(
+    paths.config,
+    process.env.NODE_ENV + ".config.yaml"
+  );
+  // load default config if it exist
+  const defaultConfig = (await fs.pathExists(defaultConfigPath))
+    ? yaml.safeLoad(await fs.readFile(defaultConfigPath, "utf8"))
+    : {};
+
+  // load env config if it exist
+  const envConfig = (await fs.pathExists(envConfigPath))
+    ? yaml.safeLoad(fs.readFileSync(envConfigPath, "utf8"))
+    : {};
+
+  const config: any = Object.assign(defaultConfig, envConfig);
+
+  return config;
 }
