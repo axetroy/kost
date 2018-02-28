@@ -14,23 +14,22 @@
 
 * [Controller](#controller)
 
-  * [如何编写一个 Controller?](#如何编写一个-controller?)
-  * [如何在 Controller 中使用 Service?](#如何在-controller-中使用-service?)
-  * [如何在 Controller 中获取框架的上下文 Context?](#如何在-controller-中获取框架的上下文-context?)
+  * [如何编写一个 Controller?](#如何编写一个-controller)
+  * [如何在 Controller 中使用 Service?](#如何在-controller-中使用-service)
+  * [如何在 Controller 中获取框架的上下文 Context?](#如何在-controller-中获取框架的上下文-context)
 
 * [Middleware](#middleware)
 
-  * [如何编写一个 Middleware?](#如何编写一个-middleware?)
-  * [如何复用/兼容 Koa 的中间件?](#如何复用/兼容-koa-的中间件?)
-  * [中间件怎么运用到全局请求?](#中间件怎么运用到全局请求?)
-  * [如何针对某个 API 使用 Middleware?](#如何针对某个-api-使用-middleware?)
-  * [How to load middleware from npm?](#how-to-load-middleware-from-npm)
+  * [如何编写一个 Middleware?](#如何编写一个-middleware)
+  * [如何复用/兼容 Koa 的中间件?](#如何复用/兼容-koa-的中间件)
+  * [中间件怎么运用到全局请求?](#中间件怎么运用到全局请求)
+  * [如何针对某个 API 使用 Middleware?](#如何针对某个-api-使用-middleware)
 
 * [Service](#service)
 
-  * [如何编写一个 Service?](#如何编写一个-service?)
-  * [如何使用 Service?](#如何使用-service?)
-  * [如何初始化服务?](#如何初始化服务?)
+  * [如何编写一个 Service?](#如何编写一个-service)
+  * [如何使用 Service?](#如何使用-service)
+  * [如何初始化服务?](#如何初始化服务)
 
 * [Context](#context)
 
@@ -94,7 +93,7 @@ $ ts-node ./app.ts
 
 ### 代理
 
- 该特性提供代理 http 或 Websocket，做到请求转发。
+该特性提供代理 http 或 Websocket，做到请求转发。
 
 下面一个例子是代理`{host}/proxy` 到 `http://127.0.0.1:3000`
 
