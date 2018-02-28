@@ -43,38 +43,42 @@ Kost 基于 Koa，使用 Typescript 编写，借鉴于 egg 的"约定大于配�
 npm install @axetroy/kost --save
 ```
 
-这是示例的项目目录
+这是示例的项目目录, 最简单的搭建一个服务
 
 ```
-example/
+.
 ├── app.ts
-├── configs
-│   ├── default.config.yaml
-│   ├── development.config.yaml
-│   ├── production.config.yaml
-│   └── test.config.yaml
 ├── controllers
-│   ├── todo.controller.ts
-│   └── user.controller.ts
-├── middlewares
-│   └── logger.middleware.ts
-├── services
-│   ├── orm.service.ts
-│   └── user.service.ts
-├── static
-│   └── test.text
-├── tsconfig.json
-└── views
-    └── index.html
+│   └── home.controller.ts
+└── tsconfig.json
 ```
 
 ```typescript
 // app.ts
 import Kost from "@axetroy/kost";
 
-new Kost().start().catch(function(err) {
-  console.error(err);
-});
+const app = new Kost();
+
+app
+  .init()
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch(err => {
+    console.error(err);
+  });
+```
+
+```typescript
+// controllers/home.controller.ts
+import { Controller, Get } from "@axetroy/kost";
+
+export default class HomeController extends Controller {
+  @Get("/")
+  index(ctx) {
+    ctx.body = "hello world";
+  }
+}
 ```
 
 ```bash
