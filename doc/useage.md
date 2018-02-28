@@ -100,7 +100,7 @@ $ ts-node ./app.ts
 * services: 存放服务
 * middlewares: 存放中间件
 * static: 存放静态文件
-* views: 存放试图模板
+* views: 存放视图模板
 
 ### Config 约定
 
