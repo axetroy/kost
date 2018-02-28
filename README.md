@@ -1,4 +1,4 @@
-## The web framework base on Koa and Typescript for NodeJS
+## Kost
 
 [![Greenkeeper badge](https://badges.greenkeeper.io/axetroy/kost.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/axetroy/kost.svg?branch=master)](https://travis-ci.org/axetroy/kost)
@@ -10,38 +10,40 @@
 [![npm version](https://badge.fury.io/js/%40axetroy%2Fkost.svg)](https://badge.fury.io/js/%40axetroy%2Fkost)
 ![Size](https://github-size-badge.herokuapp.com/axetroy/kost.svg)
 
-kost is a web framework write in Typescript and base on Koa.
+Kost基于Koa，使用Typescript编写，借鉴于egg的"约定大于配置"的思想以及nest的依赖注入和装饰器路由。
 
-**Feature**
+是一款内置多个功能，并遵循一系列规范的Web框架
 
-* [x] Dependency injection
-* [x] Write in Typescript
-* [x] Decorator for router
-* [x] Middleware support
-* [x] Service support
-* [x] Support Customer config for different environment
+**特性**
 
-**Build in Support**
+* [x] 依赖注入
+* [x] 使用Typescript编写
+* [x] 装饰器风格的路由定义
+* [x] 支持中间件，包括Koa的中间件
+* [x] 引入服务的概念
+* [x] 支持加载不同环境下的配置文件
 
-* [x] Http/Websocket proxy
-* [x] Static file server
-* [x] Body parser
-* [x] View engine
-* [x] Cross-Origin Resource Sharing
-* [ ] Exception error handler for controller/middleware
-* [ ] Cron task
+**内置特性**
 
-### Architecture
+* [x] Http/Websocket 的代理
+* [x] 静态文件服务
+* [x] 解析Http Body
+* [x] 视图引擎
+* [x] 跨域资源分享
+* [ ] 错误捕捉
+* [ ] 定时任务
+
+### 框架架构
 
 ![kost](https://raw.githubusercontent.com/axetroy/kost/master/kost.png)
 
-### Quickly start
+### 快速开始
 
 ```bash
 npm install @axetroy/kost --save
 ```
 
-Here is the project
+这是示例的项目目录
 
 ```
 example/
@@ -79,9 +81,9 @@ new Kost().start().catch(function(err) {
 $ ts-node ./app.ts
 ```
 
-## [Document](https://github.com/axetroy/kost/blob/master/doc/useage.md)
+## [文档](https://github.com/axetroy/kost/blob/master/doc/useage.md)
 
-## Contributors
+## 贡献者
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 
@@ -91,6 +93,6 @@ $ ts-node ./app.ts
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-## License
+## 开源许可协议
 
 The [MIT License](https://github.com/axetroy/kost/blob/master/LICENSE)
