@@ -1,23 +1,23 @@
 # Document
 
-* [Quickly start](#quickly-start)
+* [快速开始](#quickly-start)
 
-* [Load config](#load-config)
+* [加载配置](#load-config)
 
-* [Build in feature](#build-in-feature)
+* [内置特性](#build-in-feature)
 
-  * [Proxy](#proxy)
-  * [Static file server](#static-file-server)
-  * [Body parser](#body-parser)
-  * [View engine](#view-engine)
-  * [CORS](#cross-origin-resource-sharing)
+  * [Http/Websocket代理](#proxy)
+  * [静态文件服务](#static-file-server)
+  * [Body Parser](#body-parser)
+  * [模版渲染](#view-engine)
+  * [跨域资源分享](#cross-origin-resource-sharing)
 
 * [Controller](#controller)
 
-  * [How to write a controller?](#how-to-write-a-controller)
-  * [How to use service in controller?](#how-to-use-service-in-controller)
-  * [How to get app context in controller?](#how-to-get-app-context-in-controller)
-  * [How to use a middleware in controller?](#how-to-use-a-middleware-in-controller)
+  * [如何编写一个控制器?](#how-to-write-a-controller)
+  * [如何在控制器中使用服务?](#how-to-use-service-in-controller)
+  * [如何在控制器中获取App上下文?](#how-to-get-app-context-in-controller)
+  * [如何在控制器中使用中间件?](#how-to-use-a-middleware-in-controller)
 
 * [Middleware](#middleware)
 
