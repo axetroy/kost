@@ -19,8 +19,7 @@ export function Use(middlewareName: string, options: any = {}) {
     ) {
       throw new Error("@USE() decorator only for controller method");
     }
-    const controllerMiddleware: ControllerMiddleware$[] =
-      target[MIDDLEWARE] || [];
+    const controllerMiddleware: ControllerMiddleware$[] = target[MIDDLEWARE] || [];
     controllerMiddleware.push({
       handler: propertyKey,
       factory: MiddlewareFactory,

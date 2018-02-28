@@ -5,16 +5,17 @@ import { Use } from "./middleware";
 import { resolveMiddleware } from "../middleware";
 import Controller, { ControllerFactory$ } from "../controller";
 import { MIDDLEWARE } from "../const";
-import { paths } from "../path";
-
-const originCwd = process.cwd();
+import { paths, setCurrentWorkingDir } from "../path";
 
 test("middleware decorator is only use in controller", async t => {
-  // 进入到example目录作为测试
-  const cwd = path.join(__dirname, "..", "..", "example");
-  paths.middleware = path.join(cwd, "middlewares"); // reset the middleware
+  setCurrentWorkingDir(
+    path.join(process.cwd(), "build", "__test__", "middleware-test-example")
+  );
+
   const LoggerMiddleware = resolveMiddleware("logger");
-  process.chdir(cwd);
+
+  console.log("加载logger middleware");
+
   let Factory: ControllerFactory$;
   t.notThrows(function() {
     class HomeController extends Controller {
@@ -37,7 +38,6 @@ test("middleware decorator is only use in controller", async t => {
   ]);
 
   // if the decorator use in a customer class
-
   t.throws(function() {
     class Abc {
       router = [];

@@ -39,7 +39,7 @@
     "typedi": "^0.7.0"
   },
   "scripts": {
-    "test": "rm -rf ./build && tsc -p ./ && nyc ava ./build/*.test.js ./build/**/*.test.js",
+    "test": "rm -rf ./build && tsc -p ./ && nyc ava ./build/**/*.test.js ./build/**/**/*.test.js",
     "build": "rm -rf ./build && tsc -p ./ -d"
   },
   "author": "Axetroy",
