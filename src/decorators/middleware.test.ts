@@ -13,9 +13,7 @@ test("middleware decorator is only use in controller", async t => {
   );
 
   const LoggerMiddleware = resolveMiddleware("logger");
-
-  console.log("加载logger middleware");
-
+  
   let Factory: ControllerFactory$;
   t.notThrows(function() {
     class HomeController extends Controller {

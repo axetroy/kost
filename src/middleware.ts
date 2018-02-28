@@ -2,6 +2,7 @@ import * as path from "path";
 import { Application$ } from "./app";
 import * as Koa from "koa";
 import { paths } from "./path";
+import { getOutput } from "./utils";
 
 export interface Middleware$ {
   config: any;
@@ -44,27 +45,22 @@ export function resolveMiddleware(
   }
 
   let MiddlewareFactory: MiddlewareFactory$;
-  let moduleOutput: any;
   try {
     const localMiddlewarePath = path.join(
       paths.middleware,
       middlewareName + ".middleware"
     );
     // require from local
-    moduleOutput = require(localMiddlewarePath);
+    MiddlewareFactory = getOutput(require(localMiddlewarePath));
   } catch (err) {
     // if not found in local middleware dir
     // require from node_modules
     try {
-      moduleOutput = require(middlewareName);
+      MiddlewareFactory = getOutput(require(middlewareName));
     } catch (err) {
       throw new Error(`Can not found the middleware "${middlewareName}"`);
     }
   }
-
-  MiddlewareFactory = moduleOutput.default
-    ? moduleOutput.default
-    : moduleOutput;
 
   return MiddlewareFactory;
 }

@@ -7,6 +7,7 @@ import { paths } from "./path";
 import { Container } from "typedi";
 import * as Router from "koa-router";
 import { isValidMiddleware } from "./middleware";
+import { getOutput } from "./utils";
 
 export interface Router$ {
   method: string;
@@ -51,10 +52,7 @@ export async function loadController(): Promise<Router> {
   while (controllerFiles.length) {
     const controllerFile = controllerFiles.shift();
     const filePath: string = path.join(paths.controller, controllerFile);
-    let YourController = require(filePath);
-    YourController = YourController.default
-      ? YourController.default
-      : YourController;
+    const YourController = getOutput(require(filePath));
 
     const ctrl: Controller$ = Container.get(YourController);
 
