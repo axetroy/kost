@@ -6,7 +6,7 @@
 
 * [内置特性](#build-in-feature)
 
-  * [Http/Websocket代理](#proxy)
+  * [Http/Websocket 代理](#proxy)
   * [静态文件服务](#static-file-server)
   * [Body Parser](#body-parser)
   * [模版渲染](#view-engine)
@@ -16,7 +16,7 @@
 
   * [如何编写一个控制器?](#how-to-write-a-controller)
   * [如何在控制器中使用服务?](#how-to-use-service-in-controller)
-  * [如何在控制器中获取App上下文?](#how-to-get-app-context-in-controller)
+  * [如何在控制器中获取 App 上下文?](#how-to-get-app-context-in-controller)
   * [如何在控制器中使用中间件?](#how-to-use-a-middleware-in-controller)
 
 * [Middleware](#middleware)
@@ -34,60 +34,51 @@
   * [How to inject another service?](#how-to-inject-another-service)
   * [How to init service?](#how-to-init-service)
 
-- [Context](#context)
+* [Context](#context)
 
-## Quickly start
+## 快速开始
 
-Here I show you how to create a simple hello world app.
+这是示例的项目目录, 最简单的搭建一个服务
 
-```bash
-mkdir hello-world
-cd hello-word
 ```
-
-first, you need install [Typescript](https://github.com/Microsoft/TypeScript) and create a `tsconfig.json` in your project
-
-```bash
-touch tsconfig.json
-```
-
-and set the config like [this example](https://github.com/axetroy/kost/blob/master/example/tsconfig.json)
-
-then create an `app.ts` and `/controllers/home.controller.ts`
-
-```bash
-touch app.ts
-touch ./controllers/home.controller.ts
+.
+├── app.ts
+├── controllers
+│   └── home.controller.ts
+└── tsconfig.json
 ```
 
 ```typescript
 // app.ts
 import Kost from "@axetroy/kost";
 
-new Kost().start({ port: 3000 }).catch(function(err) {
-  console.error(err);
-});
+const app = new Kost();
+
+app
+  .init()
+  .then(() => {
+    app.listen(3000);
+  })
+  .catch(err => {
+    console.error(err);
+  });
 ```
 
 ```typescript
-// ./controllers/home.controller.ts
+// controllers/home.controller.ts
 import { Controller, Get } from "@axetroy/kost";
 
-export default class extends Controller {
+export default class HomeController extends Controller {
   @Get("/")
-  index(ctx, next) {
+  index(ctx) {
     ctx.body = "hello world";
   }
 }
 ```
 
-then use [ts-node](https://github.com/TypeStrong/ts-node) to start the app.
-
 ```bash
-ts-node ./app.ts
+$ ts-node ./app.ts
 ```
-
-Now, open your browser and type `localhost:3000`, it will should hello world
 
 ## Load config
 
