@@ -1,6 +1,6 @@
 # Document
 
-* [快速开始](#quickly-start)
+* [快速开始](#快速开始)
 
 * [加载配置](#load-config)
 
