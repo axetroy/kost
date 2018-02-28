@@ -21,10 +21,12 @@ test("service", async t => {
 });
 
 test("resolveMiddleware", async t => {
-  const cwd = path.join(__dirname, "..", "example");
+  const cwd = path.join(__dirname, "..", "__test__", "middleware-test-example");
   setCurrentWorkingDir(cwd);
-  const LoggerMiddleware = resolveMiddleware("logger");
-  // t.true(LoggerMiddleware instanceof Middleware);
+  t.notThrows(() => {
+    const LoggerMiddleware = resolveMiddleware("logger");
+    // t.true(LoggerMiddleware instanceof Middleware);
+  });
   t.throws(function() {
     // invalid middleware, it should throw an error
     resolveMiddleware("aabbcc");
