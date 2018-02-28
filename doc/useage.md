@@ -146,7 +146,7 @@ $ ts-node ./app.ts
 
 ### 代理
 
- 该特性提供代理 http 或 Websocket，做到请求转发。
+内置了[koa-proxies](https://github.com/vagusX/koa-proxies)该特性提供代理 http 或 Websocket，做到请求转发。
 
 下面一个例子是代理`{host}/proxy` 到 `http://127.0.0.1:3000`
 
