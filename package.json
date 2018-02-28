@@ -15,9 +15,11 @@
     "@types/koa-router": "^7.0.27",
     "@types/koa-views": "^2.0.3",
     "@types/node": "^9.4.5",
+    "@types/supertest": "^2.0.4",
     "ava": "^0.25.0",
     "coveralls": "^3.0.0",
     "nyc": "^11.4.1",
+    "supertest": "^3.0.0",
     "ts-node": "^5.0.0",
     "typescript": "^2.7.1"
   },
