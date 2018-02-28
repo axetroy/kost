@@ -2,6 +2,14 @@
 
 * [快速开始](#快速开始)
 
+* [一系列规范和约定](#一系列规范和约定)
+
+  * [文件目录](#文件目录)
+  * [Config](#config-约定)
+  * [Controller](#controller-约定)
+  * [Service](#service-约定)
+  * [Middleware](#middleware-约定)
+
 * [加载配置](#加载配置)
 
 * [内置特性](#build-in-feature)
@@ -77,6 +85,51 @@ export default class HomeController extends Controller {
 $ ts-node ./app.ts
 ```
 
+## 一系列规范和约定
+
+框架的正常运行，依赖与一系列的规范和预定
+
+其中包括:
+
+### 文件目录
+
+约定几个固定的文件目录
+
+* configs: 存放配置文件
+* controllers: 存放控制器
+* services: 存放服务
+* middlewares: 存放中间件
+* static: 存放静态文件
+* views: 存放试图模板
+
+### Config 约定
+
+控制器约定要放在`项目目录/configs`下，并且以为`xx.config.yaml`命名, 目前仅支持 yaml 文件作为配置，不支持 json
+
+各配置文件中的字段，应该一致
+
+### Controller 约定
+
+控制器约定要放在`项目目录/controllers`下，并且以为`xx.controller.ts`命名
+
+控制器文件暴露一个继承自 Controller 的类
+
+### Service 约定
+
+控制器约定要放在`项目目录/services`下，并且以为`xx.service.ts`命名
+
+控制器文件暴露一个继承自 Service 的类
+
+可以通过定义`async init()`来初始化 service
+
+定义`level`属性来排序服务之间的初始化顺序
+
+### Middleware 约定
+
+中间件约定要放在`项目目录/middlewares`下，并且以为`xx.middleware.ts`命名
+
+控制器文件暴露一个继承自 Middleware 的类，并且必须实现`async pipe(ctx, next)`方法
+
 ## 加载配置
 
 框架根据环境变量`NODE_ENV`，自动加载 yaml 配置文件
@@ -93,7 +146,7 @@ $ ts-node ./app.ts
 
 ### 代理
 
-该特性提供代理 http 或 Websocket，做到请求转发。
+ 该特性提供代理 http 或 Websocket，做到请求转发。
 
 下面一个例子是代理`{host}/proxy` 到 `http://127.0.0.1:3000`
 
