@@ -29,7 +29,7 @@
 * [Middleware](#middleware)
 
   * [如何编写一个 Middleware?](#如何编写一个-middleware)
-  * [如何复用/兼容 Koa 的中间件?](#如何复用/兼容-koa-的中间件)
+  * [如何复用或兼容 Koa 的中间件?](#如何复用或兼容-koa-的中间件)
   * [中间件怎么运用到全局请求?](#中间件怎么运用到全局请求)
   * [如何针对某个 API 使用 Middleware?](#如何针对某个-api-使用-middleware)
 
@@ -397,7 +397,7 @@ export default class extends Middleware {
 }
 ```
 
-### 如何复用/兼容 Koa 的中间件?
+### 如何复用或兼容 Koa 的中间件?
 
 如果你想直接使用 Koa 的中间件, 例如 [koa-cors](https://github.com/evert0n/koa-cors)
 
