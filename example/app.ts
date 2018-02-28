@@ -2,8 +2,7 @@ import Application from "../index";
 
 new Application()
   .use("logger")
-  .start({
-    port: 5000,
+  .init({
     enabled: {
       cors: true,
       static: true,
@@ -22,7 +21,9 @@ new Application()
       view: true
     }
   })
-  .then(function(ctx) {})
+  .then(function(app) {
+    app.start(3000);
+  })
   .catch(function(err) {
     console.error(err);
   });

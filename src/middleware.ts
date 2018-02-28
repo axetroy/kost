@@ -32,7 +32,17 @@ export default class Middleware implements Middleware$ {
  * @param middlewareName
  * @param cwd
  */
-export function resolveMiddleware(middlewareName: string): MiddlewareFactory$ {
+export function resolveMiddleware(
+  middlewareName: string | Koa.Middleware
+): MiddlewareFactory$ {
+  if (typeof middlewareName === "function") {
+    return class KoaMiddleware extends Middleware {
+      async pipe(ctx, next) {
+        return middlewareName(ctx, next);
+      }
+    };
+  }
+
   let MiddlewareFactory: MiddlewareFactory$;
   let moduleOutput: any;
   try {

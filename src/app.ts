@@ -22,29 +22,32 @@ import {
 } from "./config";
 import Context from "./context";
 import { paths } from "./path";
+import { CONTEXT, APP_MIDDLEWARE } from "./const";
 
 export interface Application$ {
   start(config: Config$): Promise<Server>;
 }
 
-class Application implements Application$ {
-  private app = new Koa();
+class Application extends Koa {
+  constructor() {
+    super();
+    this[CONTEXT] = Container.get(Context);
+    this[APP_MIDDLEWARE] = [];
+  }
   /**
    * start the server
    * @param startOptions
    */
-  async start(startOptions: Config$ = {}) {
-    const app = this.app;
-
+  async init(startOptions: Config$ = {}): Promise<Application> {
     // create global context
-    const context = Container.get(Context);
+    this[CONTEXT] = Container.get(Context);
 
     // load config
     const config: any = await loadConfig();
 
     // set context;
-    context.config = config;
-    context.params = startOptions;
+    this[CONTEXT].config = config;
+    this[CONTEXT].params = startOptions;
 
     // enabled some feat
     if (startOptions.enabled) {
@@ -58,7 +61,7 @@ class Application implements Application$ {
         if (bodyParser !== true) {
           bodyParserConfig = bodyParser;
         }
-        app.use(require("koa-bodyparser")(bodyParserConfig));
+        super.use(require("koa-bodyparser")(bodyParserConfig));
       }
 
       // enable static file server
@@ -76,7 +79,7 @@ class Application implements Application$ {
           );
         }
 
-        app.use(
+        super.use(
           mount(
             StaticFileServerConfig.mount,
             FileServer(paths.static, StaticFileServerConfig)
@@ -95,7 +98,7 @@ class Application implements Application$ {
             path.replace(new RegExp("^\\" + proxy.mount), "/");
         }
 
-        app.use(proxyServer(proxy.mount, proxy.options));
+        super.use(proxyServer(proxy.mount, proxy.options));
       }
 
       // enable the view engine
@@ -105,7 +108,7 @@ class Application implements Application$ {
           viewConfig = view;
         }
         const views = require("koa-views");
-        app.use(views(paths.view, viewConfig));
+        super.use(views(paths.view, viewConfig));
       }
 
       // enable cors
@@ -115,40 +118,54 @@ class Application implements Application$ {
           corsConfig = cors;
         }
         const corsMiddleware = require("koa-cors");
-        app.use(corsMiddleware(corsConfig));
+        super.use(corsMiddleware(corsConfig));
       }
     }
 
     // init service
     await loadService();
 
+    // load global middleware
+    const globalMiddleware = this[APP_MIDDLEWARE];
+    globalMiddleware.forEach(element => {
+      const { middlewareName, options } = element;
+      const MiddlewareFactory = resolveMiddleware(middlewareName);
+
+      const middleware: Middleware$ = new MiddlewareFactory();
+
+      if (!isValidMiddleware(middleware)) {
+        throw new Error(`Invalid middleware "${middlewareName}"`);
+      }
+
+      // set context and config for middleware
+      middleware.config = options;
+
+      const koaStyleMiddleware = middleware.pipe.bind(middleware);
+
+      super.use(koaStyleMiddleware);
+    });
+
     // load controller and generate router
     const router = await loadController();
 
-    app.use(router.routes()).use(router.allowedMethods());
+    super.use(router.routes()).use(router.allowedMethods());
+    return this;
+  }
 
-    return app.listen(startOptions.port || process.env.PORT || 3000);
+  start(port?: number): Server {
+    const context: Context = this[CONTEXT];
+    return super.listen(port || process.env.PORT || 3000);
   }
   /**
    * load middleware
    * @param middlewareName middleware name in /project/middlewares/:name or a npm package name
    * @param options
    */
-  use(middlewareName: string, options = {}) {
-    const app = this.app;
-    const MiddlewareFactory = resolveMiddleware(middlewareName);
-
-    const middleware: Middleware$ = new MiddlewareFactory();
-
-    if (!isValidMiddleware(middleware)) {
-      throw new Error(`Invalid middleware "${middlewareName}"`);
-    }
-
-    // set context and config for middleware
-    middleware.config = options;
-
-    app.use(middleware.pipe.bind(middleware));
-
+  use(middlewareName: string | Koa.Middleware, options = {}) {
+    this[APP_MIDDLEWARE].push({
+      middlewareName,
+      options
+    });
     return this;
   }
 }

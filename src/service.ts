@@ -1,5 +1,5 @@
 import { Application$ } from "./app";
-import { readdir } from "fs-extra";
+import { readdir, pathExists } from "fs-extra";
 import * as path from "path";
 import { paths } from "./path";
 import { Container } from "typedi";
@@ -37,9 +37,10 @@ export function isValidService(s: any): boolean {
  * load service
  */
 export async function loadService(): Promise<void> {
-  const serviceFiles: string[] = (await readdir(paths.service)).filter(file =>
-    /\.service.t|jsx?$/.test(file)
-  );
+  const serviceFiles: string[] = ((await pathExists(paths.service))
+    ? await readdir(paths.service)
+    : []
+  ).filter(file => /\.service.t|jsx?$/.test(file));
 
   // init service
   const services: Service$[] = serviceFiles
