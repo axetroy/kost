@@ -5,6 +5,8 @@ import Middleware, {
   MiddlewareFactory$,
   isValidMiddleware
 } from "./middleware";
+import Kost from "./app";
+import * as request from "supertest";
 
 import { setCurrentWorkingDir } from "./path";
 
@@ -31,6 +33,18 @@ test("resolveMiddleware", async t => {
     // invalid middleware, it should throw an error
     resolveMiddleware("aabbcc");
   });
+
+  // setup server
+  const app = new Kost().use("logger");
+  await (<any>app).init();
+
+  const server = request(app.callback());
+
+  await new Promise((resolve, reject) => {
+    server.get("/").end((err, res) => (err ? reject(err) : resolve(res)));
+  });
+
+  t.pass();
 });
 
 test("isValidMiddleware", async t => {

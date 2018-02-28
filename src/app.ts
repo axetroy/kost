@@ -36,14 +36,14 @@ class Application extends Koa {
   }
   private async init(): Promise<Application> {
     // create global context
-    this[CONTEXT] = Container.get(Context);
+    const context: Context = this[CONTEXT];
 
     // load config
     const config: any = await loadConfig();
 
     // set context;
-    this[CONTEXT].config = config;
-    this[CONTEXT].params = this.options;
+    context.config = config;
+    context.options = this.options;
 
     // enabled some feat
     if (this.options.enabled) {

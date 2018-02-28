@@ -1,7 +1,9 @@
 import test from "ava";
-import { ROUTER, MIDDLEWARE } from "./const";
+import * as constant from "./const";
 
-test("const", async t => {
-  t.deepEqual(typeof ROUTER, "symbol");
-  t.deepEqual(typeof MIDDLEWARE, "symbol");
+test("every output should be symbol", async t => {
+  for (let attr in constant) {
+    let val = constant[attr];
+    t.deepEqual(typeof val, "symbol");
+  }
 });
