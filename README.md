@@ -10,16 +10,16 @@
 [![npm version](https://badge.fury.io/js/%40axetroy%2Fkost.svg)](https://badge.fury.io/js/%40axetroy%2Fkost)
 ![Size](https://github-size-badge.herokuapp.com/axetroy/kost.svg)
 
-Kost基于Koa，使用Typescript编写，借鉴于egg的"约定大于配置"的思想以及nest的依赖注入和装饰器路由。
+Kost 基于 Koa，使用 Typescript 编写，借鉴于 egg 的"约定大于配置"的思想以及 nest 的依赖注入和装饰器路由。
 
-是一款内置多个功能，并遵循一系列规范的Web框架
+是一款内置多个功能，并遵循一系列规范的 Web 框架
 
 **特性**
 
 * [x] 依赖注入
-* [x] 使用Typescript编写
+* [x] 使用 Typescript 编写
 * [x] 装饰器风格的路由定义
-* [x] 支持中间件，包括Koa的中间件
+* [x] 支持中间件，包括 Koa 的中间件
 * [x] 引入服务的概念
 * [x] 支持加载不同环境下的配置文件
 
@@ -27,7 +27,7 @@ Kost基于Koa，使用Typescript编写，借鉴于egg的"约定大于配置"的�
 
 * [x] Http/Websocket 的代理
 * [x] 静态文件服务
-* [x] 解析Http Body
+* [x] 解析 Http Body
 * [x] 视图引擎
 * [x] 跨域资源分享
 * [ ] 错误捕捉
