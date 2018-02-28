@@ -29,16 +29,12 @@ export interface Application$ {
 }
 
 class Application extends Koa {
-  constructor() {
+  constructor(private options: Config$ = {}) {
     super();
     this[CONTEXT] = Container.get(Context);
     this[APP_MIDDLEWARE] = [];
   }
-  /**
-   * start the server
-   * @param startOptions
-   */
-  async init(startOptions: Config$ = {}): Promise<Application> {
+  private async init(): Promise<Application> {
     // create global context
     this[CONTEXT] = Container.get(Context);
 
@@ -47,12 +43,12 @@ class Application extends Koa {
 
     // set context;
     this[CONTEXT].config = config;
-    this[CONTEXT].params = startOptions;
+    this[CONTEXT].params = this.options;
 
     // enabled some feat
-    if (startOptions.enabled) {
-      const { bodyParser, proxy, view, cors } = startOptions.enabled;
-      const staticServer = startOptions.enabled.static;
+    if (this.options.enabled) {
+      const { bodyParser, proxy, view, cors } = this.options.enabled;
+      const staticServer = this.options.enabled.static;
       // enable body parser
       if (bodyParser) {
         let bodyParserConfig: BodyParserConfig$ = {};
@@ -152,8 +148,8 @@ class Application extends Koa {
     return this;
   }
 
-  start(port?: number): Server {
-    const context: Context = this[CONTEXT];
+  async start(port?: number): Promise<Server> {
+    await this.init();
     return super.listen(port || process.env.PORT || 3000);
   }
   /**

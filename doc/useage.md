@@ -60,9 +60,9 @@ import Kost from "@axetroy/kost";
 const app = new Kost();
 
 app
-  .init()
-  .then(() => {
-    app.listen(3000);
+  .start()
+  .then(function(server) {
+    console.log(`Listen on ${server.address().port}`);
   })
   .catch(err => {
     console.error(err);

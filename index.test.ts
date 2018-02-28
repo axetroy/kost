@@ -14,7 +14,9 @@ test("basic", async t => {
     path.join(process.cwd(), "build", "__test__", "controller-test-example")
   );
 
-  const app = await new Kost().init();
+  const app = new Kost();
+
+  await (<any>app).init();
 
   const server = request(app.callback());
 

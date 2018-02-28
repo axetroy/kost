@@ -58,4 +58,6 @@ test("load service", async t => {
   const user = Container.get(UserService);
 
   t.deepEqual(user.username, "admin");
+
+  t.deepEqual(await user.getUser(), { name: "Axetroy" });
 });
