@@ -2,37 +2,35 @@
 
 * [快速开始](#快速开始)
 
-* [加载配置](#load-config)
+* [加载配置](#加载配置)
 
 * [内置特性](#build-in-feature)
 
-  * [Http/Websocket 代理](#proxy)
-  * [静态文件服务](#static-file-server)
+  * [Http/Websocket 代理](#代理)
+  * [静态文件服务](#静态文件服务)
   * [Body Parser](#body-parser)
-  * [模版渲染](#view-engine)
-  * [跨域资源分享](#cross-origin-resource-sharing)
+  * [模版渲染](#模版渲染)
+  * [跨域资源分享](#跨域资源分享)
 
 * [Controller](#controller)
 
-  * [如何编写一个控制器?](#how-to-write-a-controller)
-  * [如何在控制器中使用服务?](#how-to-use-service-in-controller)
-  * [如何在控制器中获取 App 上下文?](#how-to-get-app-context-in-controller)
-  * [如何在控制器中使用中间件?](#how-to-use-a-middleware-in-controller)
+  * [如何编写一个 Controller?](#如何编写一个-controller?)
+  * [如何在 Controller 中使用 Service?](#如何在-controller-中使用-service?)
+  * [如何在 Controller 中获取框架的上下文 Context?](#如何在-controller-中获取框架的上下文-context?)
 
 * [Middleware](#middleware)
 
-  * [How to write a middleware?](#how-to-write-a-middleware)
-  * [How to reuse the Koa middleware?](#how-to-reuse-the-koa-middleware)
-  * [How to use a middleware for global request?](#how-to-use-a-middleware-for-global-request)
-  * [How to use a middleware in controller?](#how-to-use-a-middleware-in-controller)
+  * [如何编写一个 Middleware?](#如何编写一个-middleware?)
+  * [如何复用/兼容 Koa 的中间件?](#如何复用/兼容-koa-的中间件?)
+  * [中间件怎么运用到全局请求?](#中间件怎么运用到全局请求?)
+  * [如何针对某个 API 使用 Middleware?](#如何针对某个-api-使用-middleware?)
   * [How to load middleware from npm?](#how-to-load-middleware-from-npm)
 
 * [Service](#service)
 
-  * [How to write a service?](#how-to-write-a-service)
-  * [How to use service?](#how-to-use-service)
-  * [How to inject another service?](#how-to-inject-another-service)
-  * [How to init service?](#how-to-init-service)
+  * [如何编写一个 Service?](#如何编写一个-service?)
+  * [如何使用 Service?](#如何使用-service?)
+  * [如何初始化服务?](#如何初始化服务?)
 
 * [Context](#context)
 
@@ -80,33 +78,25 @@ export default class HomeController extends Controller {
 $ ts-node ./app.ts
 ```
 
-## Load config
+## 加载配置
 
-Kost let you load config without tear.
+框架根据环境变量`NODE_ENV`，自动加载 yaml 配置文件
 
-Support load YAML config file from `/project/configs`
+配置文件必须放在`/configs`目录下，例如`/configs/development.config.yaml`
 
-it will load `default.config.yaml` fist
+默认会加载`default.config.yaml`
 
-then load another config depending on your environment
+然后会与`${process.env.NODE_ENV}.config.yaml`的配置文件合并在一起
 
-if `process.env.NODE_ENV==='development'` (default), then load `development.config.yaml`
+你可以通过[Context](#context)获取配置文件
 
-if `process.env.NODE_ENV==='production'` , then load `production.config.yaml`
+## 内置特性
 
-if `process.env.NODE_ENV==='test'` , then load `test.config.yaml`
+### 代理
 
-Two config file will be merger into one object.
+ 该特性提供代理 http 或 Websocket，做到请求转发。
 
-Your can get config object from [Context](#context)
-
-## Build in feature
-
-### Proxy
-
-This feature provide you proxy request to another host or path, support http/Websocket
-
-here is an example proxy request `/proxy` to `http://127.0.0.1:3000`
+下面一个例子是代理`{host}/proxy` 到 `http://127.0.0.1:3000`
 
 ```
 localhost:3000/proxy > http://127.0.0.1:3000
@@ -137,9 +127,11 @@ new Application()
   });
 ```
 
-### Static file server
+### 静态文件服务
 
-server your static file. base on [koa-static](https://github.com/koajs/static)
+内置了[koa-static](https://github.com/koajs/static) 提供静态文件服务
+
+默认提供的 url 路径为`{host}/static`
 
 ```typescript
 import Application from "@axetroy/kost";
@@ -155,11 +147,11 @@ new Application()
   });
 ```
 
-### Body parser
+### Body Parser
 
-enable body parser use [koa-bodyparser](https://github.com/koajs/bodyparser)
+内置了[koa-bodyparser](https://github.com/koajs/bodyparser), 用于解析请求的 Http Body
 
-set `true` to use default config;
+设置 `true` 则使用默认配置
 
 ```typescript
 import Application from "@axetroy/kost";
@@ -167,7 +159,7 @@ import Application from "@axetroy/kost";
 new Application()
   .start({
     enabled: {
-      bodyParser: true // or you can pass an object, see https://github.com/koajs/bodyparser#options
+      bodyParser: true // 或者你可以传入一个对象, 详情 https://github.com/koajs/bodyparser#options
     }
   })
   .catch(function(err) {
@@ -175,13 +167,13 @@ new Application()
   });
 ```
 
-### View engine
+### 模版渲染
 
-You need to make sure `/project/views` directory exist. all view template load from it.
+首先确保 `/views` 目录存在， 所有的模版都应该存放在这里目录下.
 
-base on [koa-views](https://github.com/queckezz/koa-views)
+内置了[koa-views](https://github.com/queckezz/koa-views)，提供模版引擎
 
-set `true` to use default config;
+设置 `true` 则使用默认配置
 
 ```typescript
 import Application from "@axetroy/kost";
@@ -189,7 +181,7 @@ import Application from "@axetroy/kost";
 new Application()
   .start({
     enabled: {
-      view: true // or you can pass an object, see https://github.com/queckezz/koa-views#viewsroot-opts
+      view: true // 或者你可以传入一个对象, 详情 https://github.com/queckezz/koa-views#viewsroot-opts
     }
   })
   .catch(function(err) {
@@ -197,9 +189,11 @@ new Application()
   });
 ```
 
-#### Cross-Origin resource sharing
+#### 跨域资源分享
 
-support Cross-Origin resource sharing. base on [koa-cors](https://github.com/evert0n/koa-cors/)
+内置了[koa-cors](https://github.com/evert0n/koa-cors/)提供跨域资源的分享
+
+设置 `true` 则使用默认配置
 
 ```typescript
 import Application from "@axetroy/kost";
@@ -207,7 +201,7 @@ import Application from "@axetroy/kost";
 new Application()
   .start({
     enabled: {
-      cors: true // or you can pass an object, see https://github.com/evert0n/koa-cors/#options
+      cors: true // 或者你可以传入一个对象, 详情 https://github.com/evert0n/koa-cors/#options
     }
   })
   .catch(function(err) {
@@ -217,24 +211,22 @@ new Application()
 
 ## Controller
 
-Controller is a class to controller how to organize your api.
+Controller 是一个类，在框架初始化时自动实例化，它定义了你如何组织你的 API。
 
-This class will be call `new Controller` once.
+在控制器上，你可以使用`@Get()`、`@Post()`、`@Put()`等装饰器来定义你的路由
 
-use decorators `@GET()`、`@POST()`、`@PUT`... to controller api path.
+也可以使用`@Use()`来指定某个 API 加载指定的中间件
 
-use decorators `@USE` to config the middleware for this path.
+也可以使用`@Inject()`来注入服务
 
-use decorators `Inject()` to inject service
+### 如何编写一个 Controller?
 
-### How to write a controller?
+框架规定控制器必须在`/controllers`目录下。并且命名为`xxx.controller.ts`
 
-Create a controller file in `/project/controllers`
-
-example: `/project/controllers/user.ts`
+下面是一个例子
 
 ```typescript
-// /project/controllers/user.ts
+// controllers/user.ts
 
 import { Controller, GET, POST, DELETE } from "@axetroy/kost";
 
@@ -256,11 +248,12 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-### How to use service in controller?
+### 如何在 Controller 中使用 Service?
 
-If you have define a service in `/project/services/user.ts`
+假设你已经定义了一个服务
 
 ```typescript
+// services/user.service.ts
 import { Service } from "@axetroy/kost";
 
 class UserService extends Service {
@@ -276,11 +269,13 @@ class UserService extends Service {
 export default UserService;
 ```
 
+那么你需要这么使用, 通过装饰器 `@Inject()` 注入你所需要的服务
+
 ```typescript
-// /project/controllers/user.ts
+// controllers/user.ts
 
 import { Controller, GET, Inject } from "@axetroy/kost";
-import UserService from "../services/user";
+import UserService from "../services/user.service";
 
 class UserController extends Controller {
   @Inject() user: UserService;
@@ -294,15 +289,17 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-### How to get app context in controller?
+### 如何在 Controller 中获取框架的上下文 Context?
 
-The app context include some useful information
+框架的上下文包括了一些非常有用的信息
 
-* [x] The project config
-* [x] The bootstrap params(argument for start)
+* [x] 项目的配置
+* [x] 框架的启动参数
+
+与注入服务一样，使用 `@Inject()` 注入[Context](#context)
 
 ```typescript
-// /project/controllers/user.ts
+// controllers/user.controller.ts
 
 import { Controller, GET, Inject, Context } from "@axetroy/kost";
 
@@ -319,22 +316,22 @@ export default UserController;
 
 ## Middleware
 
-middleware is a class wrap with koa middleware.
+Middleware 是 Koa 中间件的一层 OOP 的封装
 
-It must implements with `pipe(ctx, next)` method
+它要求你必须实现`pipe(ctx, next)`方法
 
-It can use in global request and specify path
+中间件可用于全局，或者某个局部的 API，它支持从`middlewares/xxx.middleware.ts`中加载，也支持从`node_modules`中加载
 
-It support load from `/project/middlewares/xxx.ts` and `node_modules`
+优先级: 本地 > npm
 
-### How to write a middleware?
+### 如何编写一个 Middleware?
 
-Create a middle file in `/project/middlewares`
+框架规定中间件必须在`/middlewares`目录下。并且命名为`xxx.middleware.ts`
 
-example: `/project/middlewares/logger.ts`
+下面是一个例子
 
 ```typescript
-// /project/middlewares/logger.ts
+// middlewares/logger.middleware.ts
 
 import { Middleware } from "@axetroy/kost";
 export default class extends Middleware {
@@ -348,14 +345,14 @@ export default class extends Middleware {
 }
 ```
 
-### How to reuse the Koa middleware?
+### 如何复用/兼容 Koa 的中间件?
 
-If I want to use a Koa middleware, like [koa-cors](https://github.com/evert0n/koa-cors)
+如果你想直接使用 Koa 的中间件, 例如 [koa-cors](https://github.com/evert0n/koa-cors)
 
-Create a middle file in `/project/middlewares/cors`
+在项目目录下，创建一个文件 `middlewares/cors.middleware.ts`
 
 ```typescript
-// /project/middlewares/cors.ts
+// /middlewares/cors.middleware.ts
 
 import { Middleware } from "@axetroy/kost";
 import * as cors from "koa-cors";
@@ -368,11 +365,11 @@ export default class extends Middleware {
 }
 ```
 
-### How to use a middleware for global request?
+### 中间件怎么运用到全局请求?
 
-If you have create a middleware([How to write a middleware?](#how-to-write-a-middleware))
+加入你已经创建了一个中间件`middlewares/logger.middleware.ts`([How to write a middleware?](#how-to-write-a-middleware))
 
-then you should start your app with `app.use(middlewareName, options)`
+你可以这么使用
 
 ```typescript
 // app.ts
@@ -387,42 +384,20 @@ new Kost()
   });
 ```
 
-### How to load middleware from npm?
+**NOTE**: `use()`方法同样兼容 Koa 中间件，并且支持从`node_modules`中加载
 
-for example, I want to load an middleware name `@axetroy/logger` which published on npm
+### 如何针对某个 API 使用 Middleware?
 
-first, you need to install it.
-
-```bash
-npm install @axetroy/logger
-```
-
-and then load it with `use()`
-
-```typescript
-// app.ts
-import Kost from "@axetroy/kost";
-
-new Kost()
-  .use("@axetroy/kost-logger", {})
-  .start()
-  .catch(function(err) {
-    console.error(err);
-  });
-```
-
-### How to use a middleware in controller?
-
-Here is a controller
+下面是一个例子，通过使用`@Use()`装饰器，指定某个 API 的中间件
 
 ```typescript
 // /project/controllers/user.ts
 
-import { Controller, GET, USE } from "@axetroy/kost";
+import { Controller, Get, Use } from "@axetroy/kost";
 
 class UserController extends Controller {
-  @GET("/")
-  @USE("logger", {})
+  @Get("/")
+  @Use("logger", {})
   async index(ctx, next) {
     ctx.body = "hello kost";
   }
@@ -433,23 +408,24 @@ export default UserController;
 
 ## Service
 
-service is a class which can be use in controller and other service, even in middleware.
+服务是一个类，能够被注入到 Controller 当中，甚至可以注入到其他的 Service，也能够注入到 Middleware 中
 
-use `Inject()`, you can use in everywhere.
+使用`@Inject()`装饰器，你能够注入到任何你需要的地方
 
-What different with Controller?
+它跟 Controller 有什么区别?
 
-* [x] service is injectable class, can be inject into Controller/Service/Middleware
-* [x] service's logic can be reused.
-* [x] service can be init, sort by `level` property
+* [x] Service 是一个可注入的类, 你可以注入到 Controller/Service/Middleware
+* [x] Service 的逻辑是可以公用的，而 Controller 不能公用.
+* [x] Service 可以被初始化, 按照`level`属性进行排序，level 越高，优先级越高
 
-### How to write a service?
+### 如何编写一个 Service?
 
-Create a controller file in `/project/services`
+框架规定中间件必须在`/services`目录下。并且命名为`xxx.service.ts`
 
-example: `/project/services/user.ts`
+下面是一个例子
 
 ```typescript
+// services/user.service.ts
 import { Service } from "@axetroy/kost";
 
 class UserService extends Service {
@@ -465,25 +441,25 @@ class UserService extends Service {
 export default UserService;
 ```
 
-### How to use service?
+### 如何使用 Service?
 
-There a three way to use service
+服务可以通过下列方式使用：
 
-1. Inject into controller
-2. Inject into another service
-3. Inject into middleware
+1. 注入到 Controller
+2. 注入到其他 Service
+3. 注入到 Middleware
 
-Here is an example to use in controller
+下面这个例子展示了如何在 Controller 中使用
 
 ```typescript
-// /project/controllers/user.ts
+// controllers/user.ts
 
-import { Controller, GET, Inject } from "@axetroy/kost";
+import { Controller, Get, Inject } from "@axetroy/kost";
 import UserService from "../services/user";
 
 class UserController extends Controller {
   @Inject() user: UserService;
-  @GET("/:username")
+  @Get("/:username")
   async getUserInfo(ctx, next) {
     const userInfo = await this.user.getUserInfo(ctx.params.username);
     ctx.body = userInfo;
@@ -493,22 +469,23 @@ class UserController extends Controller {
 export default UserController;
 ```
 
-### How to inject another service?
+### 如何初始化服务?
 
-### How to init service?
+有一些服务，在使用前，需要做异步的初始化动作
 
-You can declare the service's `level` and `async init()` to init it.
+你可以声明 Service 的`level`属性和`async init()`方法来初始化
 
-for example, we got 2 service to init.
+例如，我们又下列两个方法来初始化
 
-* /project/services/orm.ts
-* /project/services/initUser.ts
+* /project/services/orm.service.ts
+* /project/services/user.service.ts
 
-If we want init `orm.ts` first then init `initUser.ts`
+如果你想先初始化`orm.service.ts`再初始化`user.service.ts`
 
-You can define you service's level
+你可以这样定义 Service 的`level`
 
 ```typescript
+// services/orm.service.ts
 import { Service } from "@axetroy/kost";
 
 class OrmService extends Service {
@@ -525,9 +502,10 @@ export default OrmService;
 ```
 
 ```typescript
+// services/user.service.ts
 import { Service } from "@axetroy/kost";
 
-class InitUserService extends Service {
+class UserService extends Service {
   level: 99; // set the level for this service, default: 0
   async init() {
     // create user if doest not exist
@@ -544,6 +522,10 @@ export default InitUserService;
 
 What's context?
 
-context save some important information, like `start(params)` params, [config](#load-config)
+什么是 Context?
 
-Context is an injectable class, it can be inject into [Controller](#how-to-get-app-context-in-controller), Service, Middleware
+Context 是框架的执行上下文，其中包含了重要的信息, 包括[配置](#配置加载), 包括启动参数.
+
+Context 是一个可注入的类，它可以注入到任何地方，包括 Controller/Service/Middleware
+
+Context 不需要你实例化，手动实例化会引发错误
