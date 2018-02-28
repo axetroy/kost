@@ -419,7 +419,7 @@ export default class extends Middleware {
 
 ### 中间件怎么运用到全局请求?
 
-加入你已经创建了一个中间件`middlewares/logger.middleware.ts`([How to write a middleware?](#how-to-write-a-middleware))
+加入你已经创建了一个中间件`middlewares/logger.middleware.ts`
 
 你可以这么使用
 
