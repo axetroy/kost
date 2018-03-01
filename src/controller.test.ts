@@ -73,11 +73,27 @@ test.serial("load controller with invalid middleware", async t => {
     )
   );
 
-  console.log("try to load controller");
-
   try {
     await loadController();
     t.fail("Load controller should be fail, cause middleware is invalid");
+  } catch (err) {
+    t.true(err instanceof Error);
+  }
+});
+
+test.serial("load invalid controller", async t => {
+  setCurrentWorkingDir(
+    path.join(
+      process.cwd(),
+      "build",
+      "__test__",
+      "invalid-controller-test-example"
+    )
+  );
+
+  try {
+    await loadController();
+    t.fail("Load controller should be fail, cause controller is invalid");
   } catch (err) {
     t.true(err instanceof Error);
   }

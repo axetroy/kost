@@ -75,20 +75,16 @@ export async function loadController(): Promise<Router> {
       const handler = controller[route.handler];
 
       // get the middleware for this route
-      const controllerMiddleware = (controller[MIDDLEWARE] || [])
-        .filter((m: ControllerMiddleware$) => m.handler === route.handler)
-        .map((m: ControllerMiddleware$) => {
-          const middleware = new m.factory();
-          middleware.config = m.options;
-          return middleware;
-        });
+      const controllerMiddleware = controller[MIDDLEWARE].filter(
+        (m: ControllerMiddleware$) => m.handler === route.handler
+      ).map((m: ControllerMiddleware$) => {
+        const middleware = new m.factory();
+        middleware.config = m.options;
+        return middleware;
+      });
 
-      if (env === "development" || env === "test") {
+      if (env !== "production") {
         console.log(`[${route.method.toUpperCase()}] ${route.path}`);
-      }
-
-      if (controllerMiddleware.length) {
-        console.log(controllerMiddleware);
       }
 
       controllerMiddleware.forEach(m => {
