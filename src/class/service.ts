@@ -1,13 +1,14 @@
-import { Application$ } from "./app";
-import { readdir, pathExists } from "fs-extra";
+import {Application$} from "../app";
+import {readdir, pathExists} from "fs-extra";
 import * as path from "path";
-import { paths } from "./path";
-import { Container } from "typedi";
-import { getOutput } from "./utils";
+import {paths} from "../path";
+import {Container} from "typedi";
+import {getOutput} from "../utils";
 
 export interface Service$ {
   enable: boolean;
   level: number;
+
   init(app: Application$): Promise<any>;
 }
 
@@ -18,8 +19,11 @@ export interface ServiceFactory$ {
 export default class Service implements Service$ {
   public level: number = 0; // the level of service
   public enable = true; // default true
-  constructor() {}
-  async init(): Promise<any> {}
+  constructor() {
+  }
+
+  async init(): Promise<any> {
+  }
 }
 
 /**
@@ -35,8 +39,8 @@ export function isValidService(s: any): boolean {
  */
 export async function loadService(): Promise<void> {
   const serviceFiles: string[] = ((await pathExists(paths.service))
-    ? await readdir(paths.service)
-    : []
+      ? await readdir(paths.service)
+      : []
   ).filter(file => /\.service.t|jsx?$/.test(file));
 
   // init service

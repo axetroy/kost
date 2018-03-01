@@ -1,7 +1,7 @@
 import test from "ava";
 import * as path from "path";
-import { loadConfig } from "./config";
-import { paths, setCurrentWorkingDir } from "./path";
+import {loadConfig} from "./config";
+import {setCurrentWorkingDir} from "./path";
 
 test.serial("load none config", async t => {
   const cwd = path.join(process.cwd(), "__test__", "config-none-test-example");

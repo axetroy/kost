@@ -1,17 +1,16 @@
 import "reflect-metadata";
 import * as Koa from "koa";
 import * as mount from "koa-mount";
-import * as bodyParser from "koa-bodyparser";
-import { Container } from "typedi";
-import { Server } from "http";
+import {Container} from "typedi";
+import {Server} from "http";
 
-import { loadController } from "./controller";
-import { loadService } from "./service";
+import {loadController} from "./class/controller";
+import {loadService} from "./class/service";
 import Middleware, {
   Middleware$,
   resolveMiddleware,
   isValidMiddleware
-} from "./middleware";
+} from "./class/middleware";
 import {
   Config$,
   BodyParserConfig$,
@@ -20,12 +19,12 @@ import {
   StaticFileServerConfig$,
   loadConfig
 } from "./config";
-import Context from "./context";
-import { paths } from "./path";
-import { CONTEXT, APP_MIDDLEWARE } from "./const";
+import Context from "./class/context";
+import {paths} from "./path";
+import {CONTEXT, APP_MIDDLEWARE} from "./const";
 
 export interface Application$ {
-  start(config: Config$): Promise<Server>;
+  start(port?: number): Promise<Server>;
 }
 
 class Application extends Koa {
@@ -34,6 +33,7 @@ class Application extends Koa {
     this[CONTEXT] = Container.get(Context);
     this[APP_MIDDLEWARE] = [];
   }
+
   private async init(): Promise<Application> {
     // create global context
     const context: Context = this[CONTEXT];
@@ -47,7 +47,7 @@ class Application extends Koa {
 
     // enabled some feat
     if (this.options.enabled) {
-      const { bodyParser, proxy, view, cors } = this.options.enabled;
+      const {bodyParser, proxy, view, cors} = this.options.enabled;
       const staticServer = this.options.enabled.static;
       // enable body parser
       if (bodyParser) {
@@ -124,7 +124,7 @@ class Application extends Koa {
     // load global middleware
     const globalMiddleware = this[APP_MIDDLEWARE];
     globalMiddleware.forEach(element => {
-      const { middlewareName, options } = element;
+      const {middlewareName, options} = element;
       const MiddlewareFactory = resolveMiddleware(middlewareName);
 
       const middleware: Middleware$ = new MiddlewareFactory();
@@ -152,6 +152,7 @@ class Application extends Koa {
     await this.init();
     return super.listen(port || process.env.PORT || 3000);
   }
+
   /**
    * load middleware
    * @param middlewareName middleware name in /project/middlewares/:name or a npm package name

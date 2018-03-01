@@ -1,5 +1,5 @@
 import test from "ava";
-import { paths } from "./path";
+import {paths} from "./path";
 
 test("paths", async t => {
   t.deepEqual(paths.cwd, process.cwd());

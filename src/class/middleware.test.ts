@@ -5,28 +5,31 @@ import Middleware, {
   MiddlewareFactory$,
   isValidMiddleware
 } from "./middleware";
-import Kost from "./app";
+import Kost from "../app";
 import * as request from "supertest";
 
-import { setCurrentWorkingDir } from "./path";
+import {setCurrentWorkingDir} from "../path";
 
 test("service", async t => {
   let MiddlewareFactory: MiddlewareFactory$;
+
   class MyMiddleware extends Middleware {
-    async pipe(ctx, next) {}
+    async pipe(ctx, next) {
+    }
   }
+
   const middleware = new MyMiddleware();
   // default
   t.deepEqual(middleware.config, {});
 });
 
 test.serial("resolve valid Middleware", async t => {
-  const cwd = path.join(__dirname, "..", "__test__", "middleware-test-example");
+  const cwd = path.join(process.cwd(), "build", "__test__", "middleware-test-example");
   setCurrentWorkingDir(cwd);
   t.notThrows(() => {
     const LoggerMiddleware = resolveMiddleware("logger");
   });
-  t.throws(function() {
+  t.throws(function () {
     // invalid middleware, it should throw an error
     resolveMiddleware("aabbcc");
   });
@@ -46,8 +49,8 @@ test.serial("resolve valid Middleware", async t => {
 
 test.serial("resolve invalid Middleware", async t => {
   const cwd = path.join(
-    __dirname,
-    "..",
+    process.cwd(),
+    "build",
     "__test__",
     "invalid-middleware-test-example"
   );
@@ -69,7 +72,7 @@ test.serial("resolve invalid Middleware", async t => {
 
 test.serial("compatible with koa middleware", async t => {
   // setup server
-  const app = new Kost().use(function(ctx, next) {
+  const app = new Kost().use(function (ctx, next) {
     ctx.body = "hello koa middleware";
   });
 
@@ -96,7 +99,8 @@ test("isValidMiddleware", async t => {
 
   t.true(isValidMiddleware(new MyMiddleware()));
 
-  class MiddlewareWithoutPipe extends Middleware {}
+  class MiddlewareWithoutPipe extends Middleware {
+  }
 
   t.false(isValidMiddleware(new MiddlewareWithoutPipe()));
 });

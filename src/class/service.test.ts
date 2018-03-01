@@ -1,20 +1,23 @@
 import "reflect-metadata";
 import test from "ava";
-import { Inject, Container } from "typedi";
+import {Inject, Container} from "typedi";
 import * as path from "path";
-import Service, { ServiceFactory$, loadService } from "./service";
-import { setCurrentWorkingDir } from "./path";
-import UserService from "../__test__/service-test-example/services/user.service.js";
-import LogService from "../__test__/service-test-example/services/log.service.js";
+import Service, {ServiceFactory$, loadService} from "./service";
+import {setCurrentWorkingDir} from "../path";
+import UserService from "../../__test__/service-test-example/services/user.service.js";
+import LogService from "../../__test__/service-test-example/services/log.service.js";
 
 test("service", async t => {
   let serviceFactory: ServiceFactory$;
-  t.notThrows(function() {
+  t.notThrows(function () {
     class MyService extends Service {
       enable = true;
       level = 0;
-      async init() {}
+
+      async init() {
+      }
     }
+
     serviceFactory = MyService;
   });
   const service = Container.get(serviceFactory);
@@ -25,10 +28,13 @@ test("service", async t => {
 });
 
 test("service inject service", async t => {
-  class A extends Service {}
+  class A extends Service {
+  }
+
   class B extends Service {
     @Inject() a: A;
   }
+
   const service = Container.get(B);
 
   t.true(service.a instanceof A);
@@ -36,10 +42,13 @@ test("service inject service", async t => {
 });
 
 test("Inject service", async t => {
-  class A extends Service {}
+  class A extends Service {
+  }
+
   class B extends Service {
     @Inject() a: A;
   }
+
   const service = Container.get(B);
 
   t.true(service.a instanceof A);
@@ -60,7 +69,7 @@ test.serial("Load service", async t => {
 
   t.deepEqual(user.username, "admin");
 
-  t.deepEqual(await user.getUser(), { name: "Axetroy" });
+  t.deepEqual(await user.getUser(), {name: "Axetroy"});
 
   // logger service should be inited before user service
   t.true(logger.initedAt.getTime() < user.initedAt.getTime());

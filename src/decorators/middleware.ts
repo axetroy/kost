@@ -1,6 +1,7 @@
-import { resolveMiddleware } from "../middleware";
-import Controller, { Controller$, ControllerMiddleware$ } from "../controller";
-import { MIDDLEWARE } from "../const";
+import {resolveMiddleware} from "../class/middleware";
+import Controller, {Controller$, ControllerMiddleware$} from "../class/controller";
+import {MIDDLEWARE} from "../const";
+
 /**
  * decorator of controller to inject the middleware
  * @param middlewareName
@@ -8,11 +9,9 @@ import { MIDDLEWARE } from "../const";
  */
 export function Use(middlewareName: string, options: any = {}) {
   const MiddlewareFactory = resolveMiddleware(middlewareName);
-  return function(
-    target: Controller$,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function (target: Controller$,
+                   propertyKey: string,
+                   descriptor: PropertyDescriptor) {
     if (
       target instanceof Controller === false ||
       typeof target[propertyKey] !== "function"

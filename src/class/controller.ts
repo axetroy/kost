@@ -1,13 +1,12 @@
-import { Application$ } from "./app";
-import { MiddlewareFactory$ } from "./middleware";
-import { ROUTER, MIDDLEWARE } from "./const";
-import { readdir } from "fs-extra";
+import {MiddlewareFactory$} from "./middleware";
+import {ROUTER, MIDDLEWARE} from "../const";
+import {readdir} from "fs-extra";
 import * as path from "path";
-import { paths } from "./path";
-import { Container } from "typedi";
+import {paths} from "../path";
+import {Container} from "typedi";
 import * as Router from "koa-router";
-import { isValidMiddleware } from "./middleware";
-import { getOutput } from "./utils";
+import {isValidMiddleware} from "./middleware";
+import {getOutput} from "../utils";
 
 export interface Router$ {
   method: string;
@@ -25,7 +24,8 @@ export interface ControllerFactory$ {
   new (): Controller$;
 }
 
-export interface Controller$ {}
+export interface Controller$ {
+}
 
 export default class Controller implements Controller$ {
   constructor() {

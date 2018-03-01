@@ -1,7 +1,6 @@
-import { Container } from "typedi";
 import test from "ava";
 import Context from "./context";
-import { paths } from "./path";
+import {paths} from "../path";
 
 test("every output should be symbol", async t => {
   // const context = Container.get(Context);

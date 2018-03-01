@@ -1,6 +1,5 @@
-import Controller, { Controller$, Router$ } from "../controller";
-import { Middleware$, MiddlewareFactory$ } from "../middleware";
-import { ROUTER } from "../const";
+import Controller, {Controller$, Router$} from "../class/controller";
+import {ROUTER} from "../const";
 
 /**
  * decorator for controller
@@ -8,11 +7,9 @@ import { ROUTER } from "../const";
  * @param path
  */
 function request(method: string, path: string | RegExp) {
-  return function(
-    target: Controller$,
-    propertyKey: string,
-    descriptor: PropertyDescriptor
-  ) {
+  return function (target: Controller$,
+                   propertyKey: string,
+                   descriptor: PropertyDescriptor) {
     if (
       target instanceof Controller === false ||
       typeof target[propertyKey] !== "function"

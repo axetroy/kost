@@ -1,11 +1,11 @@
 import test from "ava";
 
 import * as path from "path";
-import { Use } from "./middleware";
-import { resolveMiddleware } from "../middleware";
-import Controller, { ControllerFactory$ } from "../controller";
-import { MIDDLEWARE } from "../const";
-import { paths, setCurrentWorkingDir } from "../path";
+import {Use} from "./middleware";
+import {resolveMiddleware} from "../class/middleware";
+import Controller, {ControllerFactory$} from "../class/controller";
+import {MIDDLEWARE} from "../const";
+import {setCurrentWorkingDir} from "../path";
 
 test("middleware decorator is only use in controller", async t => {
   setCurrentWorkingDir(
@@ -13,15 +13,16 @@ test("middleware decorator is only use in controller", async t => {
   );
 
   const LoggerMiddleware = resolveMiddleware("logger");
-  
+
   let Factory: ControllerFactory$;
-  t.notThrows(function() {
+  t.notThrows(function () {
     class HomeController extends Controller {
       @Use("logger")
       async index(ctx, next) {
         ctx.body = "hello kost";
       }
     }
+
     Factory = HomeController;
   });
 
@@ -36,12 +37,14 @@ test("middleware decorator is only use in controller", async t => {
   ]);
 
   // if the decorator use in a customer class
-  t.throws(function() {
+  t.throws(function () {
     class Abc {
       router = [];
       middleware = [];
+
       @Use("logger")
-      async index(ctx, next) {}
+      async index(ctx, next) {
+      }
     }
   });
 });

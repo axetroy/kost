@@ -1,6 +1,5 @@
 import test from "ava";
-import * as path from "path";
-import { getOutput } from "./utils";
+import {getOutput} from "./utils";
 
 test("get output", async t => {
   t.deepEqual(

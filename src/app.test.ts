@@ -2,7 +2,7 @@ import test from "ava";
 import * as Koa from "koa";
 import Application from "./app";
 import * as path from "path";
-import { setCurrentWorkingDir } from "./path";
+import {setCurrentWorkingDir} from "./path";
 import * as request from "supertest";
 
 test("app", async t => {

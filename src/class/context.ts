@@ -1,11 +1,5 @@
-import * as proxyServer from "http-proxy";
-import * as Koa from "koa";
-
-import { Controller$ } from "./controller";
-import { Middleware$ } from "./middleware";
-
-import { Config$ } from "./config";
-import { paths, Path$ } from "./path";
+import {Config$} from "../config";
+import {paths, Path$} from "../path";
 
 export interface Context$ {
   readonly env: NodeJS.ProcessEnv;
@@ -29,6 +23,7 @@ export default class Context implements Context$ {
       haveInit = true;
     }
   }
+
   get env(): NodeJS.ProcessEnv {
     return process.env;
   }

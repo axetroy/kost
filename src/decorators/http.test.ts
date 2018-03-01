@@ -1,13 +1,11 @@
 import test from "ava";
-
-import * as path from "path";
-import { Get, Post, Put, Delete, Head, Patch, Options, All } from "./http";
-import Controller, { ControllerFactory$ } from "../controller";
-import { ROUTER } from "../const";
+import {Get, Post, Put, Delete, Head, Patch, Options, All} from "./http";
+import Controller, {ControllerFactory$} from "../class/controller";
+import {ROUTER} from "../const";
 
 test("http decorator", async t => {
   let Factory: ControllerFactory$;
-  t.notThrows(function() {
+  t.notThrows(function () {
     class HomeController extends Controller {
       @Get("/index")
       @Post("/index")
@@ -19,9 +17,12 @@ test("http decorator", async t => {
       async index(ctx, next) {
         ctx.body = "hello kost";
       }
+
       @Delete("/a")
-      async del() {}
+      async del() {
+      }
     }
+
     Factory = HomeController;
   });
 
@@ -32,24 +33,26 @@ test("http decorator", async t => {
 
 test("http decorator in customer controller should throw an error", async t => {
   let Factory: ControllerFactory$;
-  t.throws(function() {
+  t.throws(function () {
     class HomeController {
       @Post("/index")
       async index(ctx, next) {
         ctx.body = "hello kost";
       }
     }
+
     Factory = HomeController;
   });
 });
 
 test("http decorator in not function", async t => {
   let Factory: ControllerFactory$;
-  t.throws(function() {
+  t.throws(function () {
     class HomeController extends Controller {
       // @ts-ignore:
       @Post("/index") user: any;
     }
+
     Factory = HomeController;
   });
 });

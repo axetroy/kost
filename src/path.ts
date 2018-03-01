@@ -29,4 +29,4 @@ export function setCurrentWorkingDir(cwd: string): void {
 
 setCurrentWorkingDir(process.cwd());
 
-export { paths };
+export {paths};

@@ -1,8 +1,7 @@
 import * as path from "path";
-import { Application$ } from "./app";
 import * as Koa from "koa";
-import { paths } from "./path";
-import { getOutput } from "./utils";
+import {paths} from "../path";
+import {getOutput} from "../utils";
 
 export interface Middleware$ {
   config: any;
@@ -15,16 +14,18 @@ export interface MiddlewareFactory$ {
 
 export default class Middleware implements Middleware$ {
   public config: any = {};
+
   constructor(options?: any) {
     this.config = options || {};
   }
+
   /**
    * the pipe function, same with koa middleware
    * @param ctx
    * @param next
    */
   async pipe(ctx, next): Promise<any> {
-    
+
   }
 }
 
@@ -33,9 +34,7 @@ export default class Middleware implements Middleware$ {
  * @param middlewareName
  * @param cwd
  */
-export function resolveMiddleware(
-  middlewareName: string | Koa.Middleware
-): MiddlewareFactory$ {
+export function resolveMiddleware(middlewareName: string | Koa.Middleware): MiddlewareFactory$ {
   if (typeof middlewareName === "function") {
     return class KoaMiddleware extends Middleware {
       async pipe(ctx, next) {

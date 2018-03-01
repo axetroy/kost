@@ -3,10 +3,11 @@ import * as Koa from "koa";
 import * as yaml from "js-yaml";
 import * as fs from "fs-extra";
 import * as path from "path";
-import { paths } from "./path";
+import {paths} from "./path";
 
 export interface ProxyConfig$ extends proxyServer.ServerOptions {
   rewrite?(path: string): string;
+
   cookieDomainRewrite?: boolean;
   logs?: boolean;
 }
@@ -64,7 +65,9 @@ export interface StaticFileServerConfig$ {
   defer?: boolean;
   gzip?: boolean;
   br?: boolean;
+
   setHeaders?(res: any, path: string, stats: any): any;
+
   extensions?: boolean;
 }
 
