@@ -18,6 +18,7 @@
     "@types/supertest": "^2.0.4",
     "ava": "^0.25.0",
     "coveralls": "^3.0.0",
+    "glob": "^7.1.2",
     "nyc": "^11.4.1",
     "supertest": "^3.0.0",
     "ts-node": "^5.0.0",
@@ -39,7 +40,7 @@
     "typedi": "^0.7.0"
   },
   "scripts": {
-    "test": "rm -rf ./build && tsc -p ./ && nyc ava ./build/**/*.test.js ./build/**/**/*.test.js",
+    "test": "rm -rf ./build && tsc -p ./ && node scripts/test.js && nyc ava ./build/**/*.test.js ./build/**/**/*.test.js",
     "build": "rm -rf ./build && tsc -p ./ -d"
   },
   "author": "Axetroy",
