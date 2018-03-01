@@ -24,7 +24,7 @@ export default class Middleware implements Middleware$ {
    * @param next
    */
   async pipe(ctx, next): Promise<any> {
-    next();
+    
   }
 }
 
