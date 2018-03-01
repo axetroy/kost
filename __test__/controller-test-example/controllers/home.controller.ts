@@ -1,8 +1,9 @@
 import { Controller } from "../../../index";
-import { All, Get } from "../../../src/decorators";
+import { All, Get, Use } from "../../../src/decorators";
 
 export default class UserController extends Controller {
   @All("/")
+  @Use("logger")
   async index(ctx) {
     ctx.body = "hello world";
   }

@@ -48,6 +48,8 @@ export async function loadController(): Promise<Router> {
   );
   const controllers: Controller$[] = [];
 
+  const env: string = process.env.NODE_ENV;
+
   // load controller
   while (controllerFiles.length) {
     const controllerFile = controllerFiles.shift();
@@ -81,13 +83,17 @@ export async function loadController(): Promise<Router> {
           return middleware;
         });
 
-      if (process.env.NODE_ENV === "development") {
+      if (env === "development" || env === "test") {
         console.log(`[${route.method.toUpperCase()}] ${route.path}`);
+      }
+
+      if (controllerMiddleware.length) {
+        console.log(controllerMiddleware);
       }
 
       controllerMiddleware.forEach(m => {
         if (!isValidMiddleware(m)) {
-          throw new Error(`Invalid middleware`);
+          throw new Error(`Invalid middleware in controller .${route.handler}`);
         }
       });
 

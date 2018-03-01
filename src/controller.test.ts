@@ -34,9 +34,9 @@ test("http decorator", async t => {
   ]);
 });
 
-test("load controller", async t => {
+test.serial("load controller", async t => {
   setCurrentWorkingDir(
-    path.join(paths.cwd, "build", "__test__", "controller-test-example")
+    path.join(process.cwd(), "build", "__test__", "controller-test-example")
   );
   const router = await loadController();
 
@@ -61,4 +61,24 @@ test("load controller", async t => {
   });
 
   t.deepEqual(res2.text, "axetroy");
+});
+
+test.serial("load controller with invalid middleware", async t => {
+  setCurrentWorkingDir(
+    path.join(
+      process.cwd(),
+      "build",
+      "__test__",
+      "controller-with-invalid-middleware-test-example"
+    )
+  );
+
+  console.log("try to load controller");
+
+  try {
+    await loadController();
+    t.fail("Load controller should be fail, cause middleware is invalid");
+  } catch (err) {
+    t.true(err instanceof Error);
+  }
 });
