@@ -100,7 +100,7 @@ export async function loadConfig(): Promise<any> {
     ? yaml.safeLoad(fs.readFileSync(envConfigPath, "utf8"))
     : {};
 
-  const config: any = Object.assign(defaultConfig, envConfig);
+  const config: any = Object.assign({}, defaultConfig, envConfig);
 
   return config;
 }
