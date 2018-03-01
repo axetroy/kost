@@ -54,7 +54,7 @@ class Application extends Koa {
         let bodyParserConfig: BodyParserConfig$ = {};
 
         // 如果传入一个Object
-        if (bodyParser !== true) {
+        if (typeof bodyParser === "object") {
           bodyParserConfig = bodyParser;
         }
         super.use(require("koa-bodyparser")(bodyParserConfig));
@@ -68,7 +68,7 @@ class Application extends Koa {
         };
 
         // if pass an object
-        if (staticServer !== true) {
+        if (typeof staticServer === "object") {
           StaticFileServerConfig = Object.assign(
             StaticFileServerConfig,
             staticServer
@@ -100,7 +100,7 @@ class Application extends Koa {
       // enable the view engine
       if (view) {
         let viewConfig: ViewConfig$ = {};
-        if (view !== true) {
+        if (typeof view === "object") {
           viewConfig = view;
         }
         const views = require("koa-views");
@@ -110,7 +110,7 @@ class Application extends Koa {
       // enable cors
       if (cors) {
         let corsConfig: CorsConfig$ = {};
-        if (cors !== true) {
+        if (typeof cors === "object") {
           corsConfig = cors;
         }
         const corsMiddleware = require("koa-cors");
