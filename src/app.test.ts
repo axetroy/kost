@@ -105,14 +105,11 @@ test("app start with default build-in feature", async t => {
   t.deepEqual(res3.text, "hello static text");
 
   // test proxy
-  console.log("请求代理");
   const res4: any = await new Promise((resolve, reject) => {
     server
       .get("/proxy/static/test.text")
       .end((err, res) => (err ? reject(err) : resolve(res)));
   });
-
-  console.log("代理返回结果了");
 
   t.deepEqual(res4.statusCode, 302);
 
@@ -129,9 +126,7 @@ test("app start with custom view build-in feature", async t => {
 
   const app = new Application({
     enabled: {
-      view: {
-        
-      }
+      view: {}
     }
   });
 

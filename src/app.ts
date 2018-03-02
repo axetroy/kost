@@ -91,7 +91,6 @@ class Application extends Koa {
         // if not set rewrite
         if (!options.rewrite) {
           options.rewrite = path => {
-            console.log(path);
             return path.replace(new RegExp("^\\" + proxy.mount), "");
           };
         }
