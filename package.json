@@ -1,6 +1,6 @@
 {
   "name": "@axetroy/kost",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "The web framework base on Koa and Typescript for NodeJS",
   "main": "build/index.js",
   "directories": {
