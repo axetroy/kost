@@ -130,7 +130,7 @@ test("app start with custom view build-in feature", async t => {
   const app = new Application({
     enabled: {
       view: {
-        extension: ".html"
+        
       }
     }
   });
