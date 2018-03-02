@@ -64,7 +64,7 @@ test
 docs
 
 # others
-app
+src
 .all-contributorsrc
 .editorconfig
 .gitattributes
@@ -76,3 +76,10 @@ contributing.md
 *.map
 *.test.js
 .nyc_output
+build/__test__
+build/src
+build/example
+example
+__test__
+.idea
+.github
