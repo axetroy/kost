@@ -1,4 +1,4 @@
-import Application from "../index";
+import Application from "../../index";
 
 new Application({
   enabled: {

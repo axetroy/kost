@@ -1,4 +1,4 @@
-import { Service, Inject } from "../../index";
+import { Service, Inject } from "../../../index";
 
 class OrmService extends Service {
   async getUser() {

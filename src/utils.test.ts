@@ -1,7 +1,7 @@
 import test from "ava";
 import {getOutput} from "./utils";
 
-test("get output", async t => {
+test("get output", t => {
   t.deepEqual(
     getOutput({
       default: 123

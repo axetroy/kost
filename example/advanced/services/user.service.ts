@@ -1,4 +1,4 @@
-import { Service, Inject } from "../../index";
+import { Service, Inject } from "../../../index";
 
 class UserService extends Service {
   async getUser() {

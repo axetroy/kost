@@ -10,7 +10,8 @@ const asset = {
   ".yaml": true,
   ".yml": true,
   ".html": true,
-  ".hbs": true
+  ".hbs": true,
+  ".text": true
 };
 
 glob("__test__/**/**/*", function(err, files) {

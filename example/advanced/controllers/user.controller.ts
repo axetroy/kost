@@ -1,4 +1,4 @@
-import { Controller, Inject, Get, Use, Context } from "../../index";
+import { Controller, Inject, Get, Use, Context } from "../../../index";
 
 import UserService from "../services/user.service";
 

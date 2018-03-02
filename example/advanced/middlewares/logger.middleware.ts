@@ -1,4 +1,4 @@
-import { Middleware } from "./../../index";
+import { Middleware } from "./../../../index";
 
 export default class LoggerMiddleware extends Middleware {
   async pipe(ctx, next) {
