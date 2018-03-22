@@ -1,6 +1,5 @@
 ## Kost
 
-[![Greenkeeper badge](https://badges.greenkeeper.io/axetroy/kost.svg)](https://greenkeeper.io/)
 [![Build Status](https://travis-ci.org/axetroy/kost.svg?branch=master)](https://travis-ci.org/axetroy/kost)
 [![Coverage Status](https://coveralls.io/repos/github/axetroy/kost/badge.svg?branch=master)](https://coveralls.io/github/axetroy/kost?branch=master)
 [![Dependency](https://david-dm.org/axetroy/kost.svg)](https://david-dm.org/axetroy/kost)
