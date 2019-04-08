@@ -6,7 +6,7 @@
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 [![Prettier](https://img.shields.io/badge/Code%20Style-Prettier-green.svg)](https://github.com/prettier/prettier)
 ![Node](https://img.shields.io/badge/node-%3E=8.9-blue.svg?style=flat-square)
-[![npm version](https://badge.fury.io/js/%40axetroy%2Fkost.svg)](https://badge.fury.io/js/%40axetroy%2Fkost)
+[![npm version](https://badge.fury.io/js/%40axetroy%2Fkost.svg)](https://badge.fury.io/js/%40axetroy%2Fkost) [![Greenkeeper badge](https://badges.greenkeeper.io/axetroy/kost.svg)](https://greenkeeper.io/)
 ![Size](https://github-size-badge.herokuapp.com/axetroy/kost.svg)
 
 Kost 基于 Koa，使用 Typescript 编写，借鉴于 egg 的**约定大于配置**的思想以及 nest 的依赖注入和装饰器路由。
